@@ -15,7 +15,7 @@
 | Võ Thị Bảo Chi | vothibaochi | Phụ trách kế hoạch QA/QC và calibration nội bộ | 05_qa_plan.md, các file/thư mục 06_calibration_* |
 | Nguyễn Văn Hoàng | hoangharry22 | Phụ trách ontology, cấu hình CVAT và quy trình gán nhãn | 03_ontology_and_cvat_setup.md, 03_cvat_labels.json, 09_cvat_export_or_task_reference.txt |
 | Nguyễn Phương Thảo | bobosbasket-gif | Phụ trách kiểm thử với nhóm peer, đánh giá chất lượng và tổng hợp phản hồi | Thư mục 07_blind_handoff/ |
-| Trương Văn Vượng | hoangharry22 | Phụ trách chọn dữ liệu, xây dựng edge cases và quản lý gold decisions | sample_pack.csv, thư mục 04_edge_cases/, FREEZE.txt |
+| Trương Văn Vượng | VanVuong | Phụ trách chọn dữ liệu, xây dựng edge cases và quản lý gold decisions | sample_pack.csv, thư mục 04_edge_cases/, FREEZE.txt |
 
 
 Gợi ý chia vai (nhóm 2–3 người thì gộp): **spec owner** (`01`, `02`), **CVAT owner** (`03_*`, `sample_pack.csv`,
