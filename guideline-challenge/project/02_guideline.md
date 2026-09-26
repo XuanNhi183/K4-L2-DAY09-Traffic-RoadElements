@@ -22,7 +22,7 @@ Output phục vụ mô hình nhận diện tín hiệu liên quan đến ego. Kh
 
 ### Đầu vào bắt buộc: hướng đi dự kiến
 
-- Người tạo task phải ghi trong Guide/mô tả task **“Hướng di chuyển giả định của ego: đi thẳng”**, **“Hướng di chuyển giả định của ego: rẽ trái”** hoặc **“Hướng di chuyển giả định của ego: rẽ phải”** trước khi annotator bắt đầu. Đây là giả định của bài đánh giá, không phải ý định thực tế suy ra từ ảnh.
+- Trong CVAT, người tạo task ghi một dòng theo đúng mẫu ở đầu **Task description** (ô Markdown dùng để dán guideline), trước nội dung guideline: **“Hướng di chuyển giả định của ego: đi thẳng”**, **“Hướng di chuyển giả định của ego: rẽ trái”** hoặc **“Hướng di chuyển giả định của ego: rẽ phải”**. Dùng cùng một dòng cho tất cả annotator và peer làm cùng task. Đây là giả định của bài đánh giá, không phải ý định thực tế suy ra từ ảnh.
 - Một task dùng một hướng giả định thống nhất. Annotator không tự đổi hướng giữa các ảnh. Hướng này phải giống nhau giữa các annotator và giữa owner với peer khi chấm cùng task.
 - Vạch/mũi tên trên đường dùng để xác định làn và kiểm tra quan hệ đèn–làn, không thay thế đầu vào hướng đi. Không mặc định đi thẳng khi ảnh thiếu thông tin; không suy ra xe đang rẽ chỉ vì đường cong.
 - Nếu thiếu hướng, có hai hướng mâu thuẫn hoặc hướng ngoài phạm vi đi thẳng/rẽ trái/rẽ phải: vẫn ghi geometry, loại và trạng thái đèn; đặt `ego_relevance=unknown`, `needs_review=true` cho các đầu đèn chưa giải quyết được quan hệ và ghi issue CVAT về đầu vào chưa rõ. Đèn đã xác định chắc chắn là đèn đi bộ vẫn có `ego_relevance=not_relevant`. Người tạo task phải làm rõ đầu vào; không tự chọn một hướng.
@@ -155,7 +155,18 @@ Phóng to ảnh gốc giúp kiểm tra pixel, không tạo thêm bằng chứng.
 | **UNKNOWN** | Đối tượng có thể vẽ nhưng một hoặc nhiều thuộc tính thiếu bằng chứng | Thuộc tính tương ứng là `unknown`, `needs_review=true`; các thuộc tính chắc chắn giữ nguyên |
 | **ESCALATE đối tượng** | Thuộc tính còn `unknown`, bằng chứng mâu thuẫn hoặc có tình huống schema chưa biểu diễn được | `needs_review=true` trên box; có thể giữ các giá trị chắc chắn |
 
-Nếu không đặt được box hoặc có vấn đề toàn ảnh, ghi issue CVAT kèm tên ảnh, vị trí và câu hỏi cho QA; giữ các box hợp lệ khác. Issue là thông tin review bổ sung, không phải annotation trong export. Không đưa riêng một issue không có box vào gold như decision ESCALATE được chấm từ export; decision ESCALATE chấm được phải có `needs_review=true` trên đối tượng.
+### Quy trình đối chiếu annotation
+
+Reviewer đối chiếu từng ảnh theo cùng thứ tự để lỗi không bị gộp thành một nhận xét chung:
+
+1. **Đếm instance:** rà toàn ảnh theo thứ tự trái sang phải, trên xuống dưới; ghi nhận đầu đèn bị bỏ sót, box thừa hoặc box trùng. Một instance là một vỏ vật lý theo mục 2.
+2. **Ghép box với vỏ:** đối chiếu từng box với đúng vỏ đèn trong ảnh; kiểm tra box ôm phần vỏ nhìn thấy theo mục 3. Không xem thuộc tính đúng là bù cho box sai, thiếu hoặc trùng.
+3. **Đối chiếu thuộc tính riêng:** với từng box đã ghép, kiểm `signal_type`, `state`, rồi `ego_relevance` theo mục 4. Chỉ đánh giá mỗi thuộc tính bằng bằng chứng ảnh và hướng giả định đã ghi cho task.
+4. **Kiểm tra review:** nếu một thuộc tính là `unknown` hoặc đối tượng cần QA xử lý, xác nhận `needs_review=true`. Nếu còn vấn đề không gắn được với box, tìm issue CVAT tương ứng.
+
+Ghi từng sai khác theo ảnh và loại lỗi: **missing/extra/duplicate instance**, **geometry**, **signal_type**, **state**, **ego_relevance** hoặc **review flag**. Không gộp nhiều sai khác thành một lỗi duy nhất; nếu phân vân giữa hai giá trị, ghi bằng chứng quan sát được và áp dụng quy tắc UNKNOWN/ESCALATE ở trên. Cách phân loại này giúp so sánh annotator theo từng phần của bài toán và chỉ ra khâu cần hiệu chỉnh.
+
+Nếu không đặt được box hoặc có vấn đề toàn ảnh, ghi issue CVAT kèm tên ảnh, vị trí gần đúng trong ảnh, điều quan sát được và câu hỏi cụ thể cho QA; giữ các box hợp lệ khác. QA ghi kết luận và cách xử lý ngay trong issue trước khi đóng issue, để người khác có thể lần theo lý do. Issue là thông tin review bổ sung, không phải annotation trong export. Không đưa riêng một issue không có box vào gold như decision ESCALATE được chấm từ export; decision ESCALATE chấm được phải có `needs_review=true` trên đối tượng.
 
 UNKNOWN và ESCALATE có thể cùng xuất hiện: một cái ghi trạng thái thông tin, một cái yêu cầu review. `not_relevant` không đồng nghĩa IGNORE. `unknown` không được dùng thay cho việc chưa đọc ảnh.
 
