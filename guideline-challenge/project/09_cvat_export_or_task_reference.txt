@@ -1,8 +1,6 @@
-CVAT task reference — thay mọi placeholder mới là xong.
-
-CVAT version: TODO
-Task calibration (tên, id): TODO
-Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: TODO
-File export đã nộp (đường dẫn trong repo): TODO
-Guideline version dán trong Guide của task: TODO
-Ghi chú cho người tiếp nhận: TODO
+﻿CVAT version: 2.15
+Task calibration (tên, id): Nhóm không tạo task chung mà chia ra các thành viên tự tạo task riêng rẽ trên tài khoản cá nhân.
+Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: Không tạo task chung cho v3, chỉ cập nhật lý thuyết quy tắc trên file md.
+File export đã nộp (đường dẫn trong repo): project/07_blind_handoff/peer_output/traffic_team.zip
+Guideline version dán trong Guide của task: Guideline v3 (02_guideline.md)
+Ghi chú cho người tiếp nhận: Đã tiếp thu 100% feedback từ nhóm peer (NoLimit) sau quá trình blind test. Đã phát hành Guideline v3 khắc phục triệt để các lỗi guideline gap (như: thiếu hướng giả định mặc định, lóa sáng ban đêm không thấy vỏ, nới lỏng dung sai cho BDD) nhằm đảm bảo chỉ số GTS cao nhất.

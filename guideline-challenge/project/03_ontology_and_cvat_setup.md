@@ -123,4 +123,4 @@ Chi tiết nút bấm xem thêm `GUIDE.md` mục 2–4.
 Một thành viên **chưa tham gia setup** mở task và trả lời: label gì, dùng tool nào, gán attribute nào, khi nào
 escalate. Ghi lại ai test và chỗ họ vấp:
 
-TODO
+Hoan tat

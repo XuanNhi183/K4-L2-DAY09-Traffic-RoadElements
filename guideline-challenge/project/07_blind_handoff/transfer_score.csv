@@ -1,12 +1,12 @@
-sample_id,decision_id,expected,severity,kind,peer_evidence,correct,note
-BDD26,d1,geometry: box chỉ ôm phần sáng lóa của đèn,minor,geometry,none,,
-BDD26,d2,relevance=not_relevant (đèn hậu của ô tô phía trước),critical,decision,none,,
-BDD26,d3,label=traffic_light (đèn xanh trên cao ở giữa ngã tư),major,decision,none,,
-BDD24,d1,ESCALATE,major,decision,none,,
-BDD24,d2,relevance=not_relevant (đốm sáng mờ trên cao),minor,decision,none,,
-BDD24,d3,attribute=unknown (nếu cố tình label),major,decision,none,,
-LISA30,d1,label=traffic_light (đèn bị cắt mép ảnh),major,decision,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],,
-LISA30,d2,attribute=red,critical,decision,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],,
-LISA30,d3,geometry: box bám sát vạch viền ảnh,minor,geometry,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],,
-LISA30,d4,relevance=not_relevant (đèn nhỏ li ti của nhánh đường khác),major,decision,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],,
-BDD12,d1,relevance=not_relevant (đèn người đi bộ),minor,decision,none,,
+﻿sample_id,decision_id,expected,severity,kind,peer_evidence,correct,note
+BDD26,d1,geometry: box chỉ ôm phần sáng lóa của đèn,minor,geometry,none,0,Bỏ sót đèn lóa
+BDD26,d2,relevance=not_relevant (đèn hậu của ô tô phía trước),critical,decision,none,0,Bỏ sót không xử lý đèn hậu
+BDD26,d3,label=traffic_light (đèn xanh trên cao ở giữa ngã tư),major,decision,none,0,Bỏ sót đèn chính
+BDD24,d1,ESCALATE,major,decision,none,0,Không đánh dấu review (Escalate)
+BDD24,d2,relevance=not_relevant (đốm sáng mờ trên cao),minor,decision,none,1,Đúng vì đã bỏ qua đốm mờ
+BDD24,d3,attribute=unknown (nếu cố tình label),major,decision,none,1,Không vẽ box nên coi như đạt
+LISA30,d1,label=traffic_light (đèn bị cắt mép ảnh),major,decision,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],1,Đã vẽ đèn cắt mép
+LISA30,d2,attribute=red,critical,decision,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],1,Đã chọn đúng màu đỏ
+LISA30,d3,geometry: box bám sát vạch viền ảnh,minor,geometry,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],1,Hình học hợp lệ
+LISA30,d4,relevance=not_relevant (đèn nhỏ li ti của nhánh đường khác),major,decision,traffic_light [ego_relevance=not_relevant;needs_review=false;signal_type=circular;state=green] | traffic_light [ego_relevance=relevant;needs_review=false;signal_type=left_arrow;state=red],1,Đã chọn not_relevant cho đèn nhỏ
+BDD12,d1,relevance=not_relevant (đèn người đi bộ),minor,decision,none,0,Bỏ sót đèn đi bộ (phải vẽ và đặt not_relevant)

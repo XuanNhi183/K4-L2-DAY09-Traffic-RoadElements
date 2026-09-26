@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <version>1.1</version>
+  <meta>
+    <job>
+      <id>30</id>
+      <size>4</size>
+      <mode>annotation</mode>
+      <overlap>0</overlap>
+      <bugtracker></bugtracker>
+      <created>2026-09-26 12:21:42.264288+00:00</created>
+      <updated>2026-09-26 12:40:23.635574+00:00</updated>
+      <subset>default</subset>
+      <start_frame>0</start_frame>
+      <stop_frame>3</stop_frame>
+      <frame_filter></frame_filter>
+      <segments>
+        <segment>
+          <id>30</id>
+          <start>0</start>
+          <stop>3</stop>
+          <url>http://localhost:8080/api/jobs/30/dataset/export/api/jobs/30</url>
+        </segment>
+      </segments>
+      <owner>
+        <username>linhhl2002</username>
+        <email>linhhl2002@gmail.com</email>
+      </owner>
+      <assignee></assignee>
+      <labels>
+        <label>
+          <name>traffic_light</name>
+          <color>#00d0ff</color>
+          <type>rectangle</type>
+          <attributes>
+            <attribute>
+              <name>signal_type</name>
+              <mutable>False</mutable>
+              <input_type>select</input_type>
+              <default_value>__undefined__</default_value>
+              <values>__undefined__
+circular
+left_arrow
+right_arrow
+straight_arrow
+pedestrian
+unknown</values>
+            </attribute>
+            <attribute>
+              <name>state</name>
+              <mutable>False</mutable>
+              <input_type>select</input_type>
+              <default_value>__undefined__</default_value>
+              <values>__undefined__
+red
+yellow
+red_yellow
+green
+off
+unknown</values>
+            </attribute>
+            <attribute>
+              <name>ego_relevance</name>
+              <mutable>False</mutable>
+              <input_type>select</input_type>
+              <default_value>__undefined__</default_value>
+              <values>__undefined__
+relevant
+not_relevant
+unknown</values>
+            </attribute>
+            <attribute>
+              <name>needs_review</name>
+              <mutable>False</mutable>
+              <input_type>checkbox</input_type>
+              <default_value>false</default_value>
+              <values>false</values>
+            </attribute>
+          </attributes>
+        </label>
+      </labels>
+    </job>
+    <dumped>2026-09-26 12:40:53.680722+00:00</dumped>
+  </meta>
+  <image id="0" name="BDD12.jpg" width="1280" height="720">
+  </image>
+  <image id="1" name="BDD24.jpg" width="1280" height="720">
+  </image>
+  <image id="2" name="BDD26.jpg" width="1280" height="720">
+  </image>
+  <image id="3" name="LISA30.jpg" width="1280" height="960">
+    <box label="traffic_light" source="manual" occluded="0" xtl="732.29" ytl="131.69" xbr="760.78" ybr="199.52" z_order="0">
+      <attribute name="signal_type">left_arrow</attribute>
+      <attribute name="state">red</attribute>
+      <attribute name="ego_relevance">relevant</attribute>
+      <attribute name="needs_review">false</attribute>
+    </box>
+    <box label="traffic_light" source="manual" occluded="0" xtl="924.94" ytl="140.81" xbr="955.15" ybr="211.49" z_order="0">
+      <attribute name="signal_type">circular</attribute>
+      <attribute name="state">green</attribute>
+      <attribute name="ego_relevance">not_relevant</attribute>
+      <attribute name="needs_review">false</attribute>
+    </box>
+  </image>
+</annotations>

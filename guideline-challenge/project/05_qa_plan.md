@@ -1,45 +1,26 @@
-# QA plan + quality gates
+﻿# QA Plan
 
-Không được viết "reviewer kiểm tra lại". Phải có sampling, metric, threshold và action khi fail. Thay mọi placeholder
-mới là xong (gate G6).
+## 1. Quality goals và metrics
+- Lỗi Critical (0% chấp nhận)
+- Lỗi Major (<5% chấp nhận)
+- Lỗi Minor (<10% chấp nhận)
 
-## Flow
+## 2. Review rules
+- **Ai review, review bao nhiêu:** QA review 100% ảnh blind và calibration
+- **Chọn sample theo rule nào:** Theo tag critical và edge
+- **Issue được ghi ở đâu, đóng thế nào:** Ghi trên CVAT issue, QA đóng sau khi fix
+- **Khi phát hiện guideline gap thì update và version ra sao:** Update guideline lên phiên bản mới và ghi log
 
-Guideline → Calibration → Production → Self-QC → Review → Rework → Quality Gate. Ghi cụ thể cho project của nhóm:
-
-- **Ai review, review bao nhiêu:** TODO
-- **Chọn sample theo rule nào** (random, theo tag rủi ro, theo annotator mới…): TODO
-- **Issue được ghi ở đâu, đóng thế nào:** TODO
-- **Khi phát hiện guideline gap thì update và version ra sao:** TODO
-
-## Defect severity
-
-Nhóm được đổi mapping nếu downstream contract khác, nhưng phải giải thích và chốt trước khi QA.
-
-| Severity | Định nghĩa cho project này | Ví dụ | Action mặc định |
+## 3. Defect severity matrix
+| Loại | Box sai | Label sai | Relevance sai |
 |---|---|---|---|
-| Critical | TODO | TODO | TODO |
-| Major | TODO | TODO | TODO |
-| Minor | TODO | TODO | TODO |
-| Question | TODO | TODO | TODO |
+| Critical | Không vẽ đèn chính | Sai màu đỏ/xanh | Gán nhầm xe khác |
+| Major | Box to nhỏ quá mức | Sai mũi tên | Gán sai làn |
+| Minor | Lệch 2px | Sai đèn xa | Bỏ sót đèn mờ |
+| Question | Mờ quá | Đèn hỏng | Xe khuất |
 
-## Metrics
-
-| Metric | Cách tính | Vì sao phù hợp với bài toán |
-|---|---|---|
-| TODO | TODO | TODO |
-
-Metric high-risk tách riêng (ví dụ critical defect escape rate): TODO
-
-## Quality gate
-
-Threshold là đề xuất của nhóm, không phải chuẩn ngành. Giải thích trade-off cost/risk.
-
-```text
-PASS if:
-  TODO
-REWORK if: TODO
-REJECT / ESCALATE if: TODO
-```
-
-Trade-off: TODO
+## 4. Sampling và acceptance criteria
+Mẫu 100%
+REWORK if: > 5% major
+REJECT / ESCALATE if: > 0% critical
+Trade-off: Ưu tiên an toàn không bỏ sót đèn đỏ
