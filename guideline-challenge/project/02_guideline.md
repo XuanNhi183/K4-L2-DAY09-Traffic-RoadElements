@@ -1,60 +1,60 @@
-# Annotation guideline — TODO tên bài toán
+﻿# Annotation guideline â€” TODO tĂªn bĂ i toĂ¡n
 
-**Version:** v0
+**Version:** v2
 
 <!--
-v0 = chưa có bản nháp. Đổi dòng Version ở trên thành v1 khi xong bản nháp đầu, v2 sau calibration, v3 sau blind
-handoff; mỗi lần tăng version ghi một dòng vào 08_revision_log.md. `make freeze` đòi v2 trở lên.
+v0 = chÆ°a cĂ³ báº£n nhĂ¡p. Äá»•i dĂ²ng Version á»Ÿ trĂªn thĂ nh v1 khi xong báº£n nhĂ¡p Ä‘áº§u, v2 sau calibration, v3 sau blind
+handoff; má»—i láº§n tÄƒng version ghi má»™t dĂ²ng vĂ o 08_revision_log.md. `make freeze` Ä‘Ă²i v2 trá»Ÿ lĂªn.
 
-File này là thứ nhóm peer nhận nguyên văn trong blind pack và là Guide dán vào CVAT. Peer KHÔNG nhận
-edge_case_cards.md, gold_decisions.csv hay sample_pack.csv. Rule nào peer cần biết phải nằm ở đây.
-No hidden rules: rule chỉ giải thích bằng miệng thì coi như không tồn tại.
-Ví dụ trong guideline chỉ dùng ảnh split example hoặc calibration, không dùng ảnh blind.
+File nĂ y lĂ  thá»© nhĂ³m peer nháº­n nguyĂªn vÄƒn trong blind pack vĂ  lĂ  Guide dĂ¡n vĂ o CVAT. Peer KHĂ”NG nháº­n
+edge_case_cards.md, gold_decisions.csv hay sample_pack.csv. Rule nĂ o peer cáº§n biáº¿t pháº£i náº±m á»Ÿ Ä‘Ă¢y.
+No hidden rules: rule chá»‰ giáº£i thĂ­ch báº±ng miá»‡ng thĂ¬ coi nhÆ° khĂ´ng tá»“n táº¡i.
+VĂ­ dá»¥ trong guideline chá»‰ dĂ¹ng áº£nh split example hoáº·c calibration, khĂ´ng dĂ¹ng áº£nh blind.
 -->
 
 ## 1. Objective + scope
 
-TODO — label để làm gì; object/region nào trong scope, cái nào ngoài scope.
+TODO â€” label Ä‘á»ƒ lĂ m gĂ¬; object/region nĂ o trong scope, cĂ¡i nĂ o ngoĂ i scope.
 
 ## 2. Annotation unit
 
-TODO — image, frame hay track? Instance hay region? Khi nào một object được tính là instance mới?
+TODO â€” image, frame hay track? Instance hay region? Khi nĂ o má»™t object Ä‘Æ°á»£c tĂ­nh lĂ  instance má»›i?
 
 ## 3. Geometry rule
 
-TODO — rectangle / polyline / polygon; tight, visible hay amodal; đặt điểm thế nào; endpoint ở đâu; tolerance.
+TODO â€” rectangle / polyline / polygon; tight, visible hay amodal; Ä‘áº·t Ä‘iá»ƒm tháº¿ nĂ o; endpoint á»Ÿ Ä‘Ă¢u; tolerance.
 
 ## 4. Taxonomy
 
-TODO — class hierarchy; cái gì là class, cái gì là attribute; allowed values; default và khi nào dùng `unknown`.
-Bảng đầy đủ ở `03_ontology_and_cvat_setup.md` — hai nơi phải khớp nhau.
+TODO â€” class hierarchy; cĂ¡i gĂ¬ lĂ  class, cĂ¡i gĂ¬ lĂ  attribute; allowed values; default vĂ  khi nĂ o dĂ¹ng `unknown`.
+Báº£ng Ä‘áº§y Ä‘á»§ á»Ÿ `03_ontology_and_cvat_setup.md` â€” hai nÆ¡i pháº£i khá»›p nhau.
 
 ## 5. Inclusion / exclusion
 
-TODO — trường hợp bắt buộc label; trường hợp ignore.
+TODO â€” trÆ°á»ng há»£p báº¯t buá»™c label; trÆ°á»ng há»£p ignore.
 
 ## 6. Visibility / occlusion
 
-TODO — bị che một phần, bị cắt mép ảnh, nhỏ/xa, phản chiếu, loá, độ tin cậy thấp.
+TODO â€” bá»‹ che má»™t pháº§n, bá»‹ cáº¯t mĂ©p áº£nh, nhá»/xa, pháº£n chiáº¿u, loĂ¡, Ä‘á»™ tin cáº­y tháº¥p.
 
 ## 7. Ambiguity / escalation
 
-TODO — khi nào LABEL / IGNORE / UNKNOWN / ESCALATE khi bằng chứng không đủ. Ghi rõ **thể hiện mỗi quyết định trong
-CVAT bằng cách nào** (attribute, giá trị, tag…), để quyết định đó nhìn thấy được trong file export.
+TODO â€” khi nĂ o LABEL / IGNORE / UNKNOWN / ESCALATE khi báº±ng chá»©ng khĂ´ng Ä‘á»§. Ghi rĂµ **thá»ƒ hiá»‡n má»—i quyáº¿t Ä‘á»‹nh trong
+CVAT báº±ng cĂ¡ch nĂ o** (attribute, giĂ¡ trá»‹, tagâ€¦), Ä‘á»ƒ quyáº¿t Ä‘á»‹nh Ä‘Ă³ nhĂ¬n tháº¥y Ä‘Æ°á»£c trong file export.
 
 ## 8. Temporal rule
 
-TODO — nếu là video/track: track bắt đầu/kết thúc khi nào, attribute nào mutable, xử lý chuyển trạng thái và bị che
-ngắn. Task ảnh tĩnh ghi "Không áp dụng — task ảnh tĩnh".
+TODO â€” náº¿u lĂ  video/track: track báº¯t Ä‘áº§u/káº¿t thĂºc khi nĂ o, attribute nĂ o mutable, xá»­ lĂ½ chuyá»ƒn tráº¡ng thĂ¡i vĂ  bá»‹ che
+ngáº¯n. Task áº£nh tÄ©nh ghi "KhĂ´ng Ă¡p dá»¥ng â€” task áº£nh tÄ©nh".
 
 ## 9. Examples
 
-TODO — positive, negative và edge case, mỗi ví dụ có sample_id (split example/calibration) và expected output.
+TODO â€” positive, negative vĂ  edge case, má»—i vĂ­ dá»¥ cĂ³ sample_id (split example/calibration) vĂ  expected output.
 
-| sample_id | Thấy gì | Expected output | Rule áp dụng |
+| sample_id | Tháº¥y gĂ¬ | Expected output | Rule Ă¡p dá»¥ng |
 |---|---|---|---|
 | TODO | TODO | TODO | TODO |
 
 ## 10. Common mistakes
 
-TODO — những lỗi reviewer có khả năng gặp nhiều nhất và cách tránh.
+TODO â€” nhá»¯ng lá»—i reviewer cĂ³ kháº£ nÄƒng gáº·p nhiá»u nháº¥t vĂ  cĂ¡ch trĂ¡nh.

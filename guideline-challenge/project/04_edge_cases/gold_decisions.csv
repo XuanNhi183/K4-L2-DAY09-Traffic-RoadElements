@@ -1,1 +1,12 @@
-sample_id,decision_id,expected,severity,rationale
+﻿sample_id,decision_id,expected,severity,rationale
+BDD26,d1,geometry: box chỉ ôm phần sáng lóa của đèn,minor,Theo rule lóa ban đêm (EC-03) không tự ý ước lượng vẽ cả vỏ hộp đèn
+BDD26,d2,relevance=not_relevant (đèn hậu của ô tô phía trước),critical,Nghiêm trọng: Label nhầm đèn đuôi xe thành đèn đỏ ngã tư sẽ khiến xe phanh gấp gây tai nạn
+BDD26,d3,label=traffic_light (đèn xanh trên cao ở giữa ngã tư),major,Nhận diện đúng cụm đèn chính điều khiển làn đang chạy
+BDD24,d1,ESCALATE,major,Theo rule EC-07 không tự ý đoán vị trí đèn khi bão tuyết che khuất tầm nhìn
+BDD24,d2,relevance=not_relevant (đốm sáng mờ trên cao),minor,Không được vẽ box bừa bãi vào các vùng sáng không xác định
+BDD24,d3,attribute=unknown (nếu cố tình label),major,Bắt buộc phải đặt unknown để tránh AI học sai đặc trưng màu do nhiễu tuyết rơi
+LISA30,d1,label=traffic_light (đèn bị cắt mép ảnh),major,Đèn sát ngã tư dù bị cắt khung hình vẫn đặc biệt quan trọng (EC-08)
+LISA30,d2,attribute=red,critical,Nghiêm trọng: Đoán sai màu đỏ ở khoảng cách sát ngã tư sẽ dẫn tới đâm xe vượt đèn đỏ
+LISA30,d3,geometry: box bám sát vạch viền ảnh,minor,Không được vẽ box ảo tràn ra ngoài phần mép ảnh không nhìn thấy
+LISA30,d4,relevance=not_relevant (đèn nhỏ li ti của nhánh đường khác),major,Chỉ tập trung tín hiệu hướng đang đi để tránh nhiễu hệ thống
+BDD12,d1,relevance=not_relevant (đèn người đi bộ),minor,Không label đèn dành cho người đi bộ (EC-06)

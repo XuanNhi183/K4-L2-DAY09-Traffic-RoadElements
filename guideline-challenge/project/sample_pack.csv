@@ -1,1 +1,12 @@
-sample_id,split,tags,reason
+﻿sample_id,split,tags,reason
+BDD07,example,normal,Đèn giao thông treo trên cao rất rõ ràng
+BDD11,example,normal,Đèn đỏ ở cột bên phải đường
+LISA01,example,normal,Ví dụ đèn giao thông từ tập LISA (xa)
+LISA15,example,normal,Ví dụ đèn giao thông từ tập LISA (gần hơn)
+BDD17,calibration,edge,Trời mưa tầm nhìn hạn chế
+BDD18,calibration,critical,Ban đêm dễ nhầm lẫn đuôi xe tải thành ngã tư
+LISA10,calibration,edge,Khung hình bị che lấp một phần
+BDD26,blind,edge,Ban đêm đường phố phức tạp lóa sáng
+BDD24,blind,critical,Trời bão tuyết không thể phân biệt đèn
+LISA30,blind,edge,Cận cảnh đèn bị cắt nửa ở mép ảnh
+BDD12,blind,normal,Ngã tư ban ngày rõ ràng
