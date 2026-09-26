@@ -9,4 +9,5 @@ LISA10,calibration,edge,Khung hình bị che lấp một phần
 BDD26,blind,edge,Ban đêm đường phố phức tạp lóa sáng
 BDD24,blind,critical,Trời bão tuyết không thể phân biệt đèn
 LISA30,blind,edge,Cận cảnh đèn bị cắt nửa ở mép ảnh
-BDD12,blind,normal,Ngã tư ban ngày rõ ràng
+BDD12,blind,normal,Ngã tư ban ngày rõ ràngBDD20,calibration,normal,Ngã tư khu dân cư ban ngày
+LISA25,calibration,edge,Đèn giao thông bị khuất tầm nhìn
