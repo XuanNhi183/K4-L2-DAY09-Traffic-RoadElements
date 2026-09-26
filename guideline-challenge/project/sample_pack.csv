@@ -6,8 +6,10 @@ LISA15,example,normal,Ví dụ đèn giao thông từ tập LISA (gần hơn)
 BDD17,calibration,edge,Trời mưa tầm nhìn hạn chế
 BDD18,calibration,critical,Ban đêm dễ nhầm lẫn đuôi xe tải thành ngã tư
 LISA10,calibration,edge,Khung hình bị che lấp một phần
+LISA25,calibration,edge,Đèn giao thông bị khuất tầm nhìn
+BDD20,calibration,normal,Ngã tư khu dân cư ban ngày
+BDD22,calibration,normal,Trời nhiều mây lúc chạng vạng
 BDD26,blind,edge,Ban đêm đường phố phức tạp lóa sáng
 BDD24,blind,critical,Trời bão tuyết không thể phân biệt đèn
 LISA30,blind,edge,Cận cảnh đèn bị cắt nửa ở mép ảnh
-BDD12,blind,normal,Ngã tư ban ngày rõ ràngBDD20,calibration,normal,Ngã tư khu dân cư ban ngày
-LISA25,calibration,edge,Đèn giao thông bị khuất tầm nhìn
+BDD12,blind,normal,Ngã tư ban ngày rõ ràng
