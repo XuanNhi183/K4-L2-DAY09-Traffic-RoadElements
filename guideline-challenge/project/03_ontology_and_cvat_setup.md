@@ -26,7 +26,7 @@ Các dropdown mặc định `__undefined__` thay vì một giá trị thật: n�
 - **Phiên bản CVAT** (`py lab9.py cvat`): 2.75.1
 - **Tên task calibration** (có version guideline, ví dụ `team07-calib-v1`): mỗi người một task `traffic-calib-<tên>` (ví dụ
   `traffic-calib-hoang`), dựng theo guideline v1 với bộ calibration 6 ảnh BDD/LISA
-- **Guide của task đã dán `02_guideline.md`?** TODO (có / chưa)
+- **Guide của task đã dán `02_guideline.md`?** Có
 - **Nhóm dùng Track hay Shape, vì sao:** Shape. Mỗi ảnh là một quan sát độc lập (ảnh BDD đơn lẻ, frame LISA không liên
   tiếp), guideline mục 8 không dùng temporal rule; export bằng **CVAT for images 1.1**
 
