@@ -64,7 +64,7 @@ Chỉ có một class đối tượng `traffic_light`. Loại tín hiệu, màu 
 |---|---|---|---|---|
 | `traffic_light` | Class đối tượng / `rectangle` | Rectangle Shape | Không áp dụng | Không áp dụng |
 | `signal_type` | Attribute của `traffic_light` | Select | `circular`, `left_arrow`, `right_arrow`, `straight_arrow`, `pedestrian`, `unknown` | `unknown` |
-| `state` | Attribute của `traffic_light` | Select | `red`, `yellow`, `green`, `white`, `orange`, `off`, `unknown` | `unknown` |
+| `state` | Attribute của `traffic_light` | Select | `red`, `yellow`, `red_yellow`, `green`, `off`, `unknown` | `unknown` |
 | `ego_relevance` | Attribute của `traffic_light` | Select | `relevant`, `not_relevant`, `unknown` | `unknown` |
 | `needs_review` | Attribute của `traffic_light` | Checkbox | `false`, `true` | `false` |
 
@@ -76,18 +76,20 @@ Ba dropdown mặc định `unknown`. Annotator phải kiểm tra từng thuộc 
 
 - `circular`: tín hiệu đọc được là hình tròn; `left_arrow`, `right_arrow`, `straight_arrow`: nhận ra mũi tên hướng trái, phải hoặc thẳng (mũi tên lên). Hướng của ký hiệu và vị trí vỏ trong ảnh là hai thứ khác nhau: không chọn mũi tên trái chỉ vì vỏ ở bên trái ảnh.
 - `pedestrian`: nhận diện chắc chắn đầu đèn cho người đi bộ từ ký hiệu người đi bộ, bàn tay hoặc chữ dành cho người đi bộ. Không dùng biển báo có hình người làm bằng chứng duy nhất; phải nhận diện được đó là đầu đèn. Chỉ thấy chữ số đếm ngược mà chưa xác định được đối tượng phục vụ thì `signal_type=unknown`, `needs_review=true`.
-- Ghi `red`, `yellow`, `green` theo màu của tín hiệu đang sáng trong chính vỏ đó. Với `pedestrian`, có thêm `white` và `orange` khi nhìn rõ đúng màu này; không quy đổi trắng thành xanh hoặc cam thành đỏ, không ghi giá trị theo ý nghĩa đi/dừng. Nếu đèn cho xe trông trắng do chói, dùng `state=unknown` và review, không gán `white`. Không lấy màu từ đầu đèn khác, không suy màu chỉ từ vị trí bóng trên/dưới.
+- Đèn cho xe: ghi `red`, `yellow`, `green` theo màu của tín hiệu đang sáng trong chính vỏ đó. `red_yellow` chỉ dùng khi nhìn rõ **bóng đỏ và bóng vàng cùng sáng** trong cùng vỏ; chỉ thấy một bóng sáng mà không phân biệt được đỏ hay vàng thì `state=unknown`, không dùng `red_yellow`.
+- Đèn `pedestrian`: schema không có màu trắng/cam, nên ghi `state` theo ý nghĩa ký hiệu đang sáng: người đang đi (thường trắng hoặc xanh) → `green`; bàn tay hoặc người đứng (thường cam hoặc đỏ) → `red`. Không đọc được ký hiệu nào đang sáng thì `state=unknown`, `needs_review=true`. Quy đổi này chỉ áp dụng cho đèn đi bộ.
+- Nếu đèn cho xe trông trắng do chói, dùng `state=unknown` và review, không đoán màu. Không lấy màu từ đầu đèn khác, không suy màu chỉ từ vị trí bóng trên/dưới.
 - Nếu đọc được màu nhưng không phân biệt được tròn/mũi tên: giữ màu đã đọc được trong `state`, đặt `signal_type=unknown` và `needs_review=true`. Không xóa một quan sát chắc chắn chỉ vì thuộc tính khác chưa rõ.
 - Nếu nhận ra hình ký hiệu nhưng không chắc màu: giữ `signal_type`, đặt `state=unknown`, `needs_review=true`.
 - `off`: nhìn đủ các vị trí bóng trong vỏ, không bị che/chói và không thấy bóng nào sáng. Không suy nguyên nhân hỏng/mất điện. Không dùng `off` khi chỉ một bóng tắt trong lúc bóng khác đang sáng. Khi toàn vỏ tắt, chỉ ghi loại nếu hình ký hiệu vẫn đọc được; nếu không, `signal_type=unknown`.
-- Nếu có nhiều tín hiệu cùng sáng trong một vỏ nhưng khác loại hoặc khác màu, schema này không biểu diễn đầy đủ: thuộc tính nào không thể gán một giá trị duy nhất thì đặt `unknown`, bật `needs_review`; không tách một vỏ thành nhiều box hoặc tự chọn bóng ưu tiên. Mũi tên kết hợp nhiều hướng hoặc ký hiệu khác chưa có trong schema dùng `signal_type=unknown` và chuyển review, không ép vào một hướng.
+- Nếu có nhiều tín hiệu cùng sáng trong một vỏ nhưng khác loại hoặc khác màu, schema này không biểu diễn đầy đủ: thuộc tính nào không thể gán một giá trị duy nhất thì đặt `unknown`, bật `needs_review`; không tách một vỏ thành nhiều box hoặc tự chọn bóng ưu tiên. Ngoại lệ duy nhất về màu: bóng đỏ và bóng vàng cùng sáng thì `state=red_yellow`. Mũi tên kết hợp nhiều hướng hoặc ký hiệu khác chưa có trong schema dùng `signal_type=unknown` và chuyển review, không ép vào một hướng.
 - Mọi đầu đèn được vẽ đều phải có loại và trạng thái, **kể cả `ego_relevance=not_relevant`**. Không có giá trị `not_applicable` trong schema này.
 
 ### Cách chọn `ego_relevance`
 
 `relevant` nghĩa là có đủ bằng chứng đầu đèn trực tiếp điều khiển chuyển động dự kiến của ego; không có nghĩa đèn xanh. `not_relevant` nghĩa là có bằng chứng đầu đèn điều khiển đối tượng, hướng/làn/giao lộ khác. `unknown` nghĩa là chưa đủ bằng chứng để kết luận một trong hai.
 
-Đèn đã nhận diện chắc chắn là `pedestrian` luôn có `ego_relevance=not_relevant` vì nó dành cho người đi bộ, không trực tiếp điều khiển xe. Đây chỉ là định nghĩa quan hệ trong annotation, không có nghĩa người đi bộ hoặc vạch qua đường không ảnh hưởng quyết định lái xe. Vẫn ghi màu thật; nếu màu chưa rõ thì `state=unknown`, `needs_review=true`.
+Đèn đã nhận diện chắc chắn là `pedestrian` luôn có `ego_relevance=not_relevant` vì nó dành cho người đi bộ, không trực tiếp điều khiển xe. Đây chỉ là định nghĩa quan hệ trong annotation, không có nghĩa người đi bộ hoặc vạch qua đường không ảnh hưởng quyết định lái xe. Vẫn ghi `state` theo quy tắc đèn đi bộ ở trên (người đi → `green`, bàn tay/người đứng → `red`); nếu ký hiệu đang sáng chưa rõ thì `state=unknown`, `needs_review=true`.
 
 Thực hiện theo thứ tự:
 
@@ -118,7 +120,7 @@ Một hướng có thể được điều khiển bởi nhiều đầu đèn: đ
 | Tình huống | Quyết định |
 |---|---|
 | Nhận diện chắc chắn một đầu đèn cho xe hoặc người đi bộ và xác định được phần vỏ nhìn thấy | Vẽ `traffic_light`, điền đủ attribute |
-| Nhận diện chắc chắn đầu đèn cho người đi bộ | Vẽ `traffic_light`, `signal_type=pedestrian`, ghi màu quan sát, `ego_relevance=not_relevant` |
+| Nhận diện chắc chắn đầu đèn cho người đi bộ | Vẽ `traffic_light`, `signal_type=pedestrian`, `state` theo mục 4 (người đi → `green`, bàn tay → `red`), `ego_relevance=not_relevant` |
 | Đầu đèn không áp dụng cho ego nhưng vẫn nhận diện được | Vẫn vẽ; ghi loại/màu thật và `ego_relevance=not_relevant` nếu có đủ bằng chứng |
 | Đầu đèn xa, thuộc luồng khác hoặc giao lộ tiếp theo | Vẫn vẽ nếu nhận diện và đặt khung được; không bỏ chỉ vì ở xa. Quan hệ chắc chắn khác ego là `not_relevant`, chưa rõ là `unknown` |
 | Đầu đèn cho xe nhìn từ cạnh/sau, nhận diện được vỏ nhưng không thấy tín hiệu | Vẽ phần vỏ nhìn thấy; loại/trạng thái không đọc được là `unknown`, không gán `off` |
@@ -183,7 +185,7 @@ Các tình huống dưới đây minh họa cách áp dụng rule; **chưa phả
 | Chờ ảnh example/calibration — E03 | Bố trí như E02, nhưng hướng giả định đi thẳng và đủ bằng chứng quan hệ làn | Mũi tên `left_arrow/red/not_relevant`; đèn tròn `circular/green/relevant`; vẫn giữ màu đỏ của đèn không áp dụng | 4, 5 |
 | Chờ ảnh example/calibration — E04 | Đọc được mũi tên trái đỏ nhưng không xác lập được làn/hướng nó điều khiển | `left_arrow/red/unknown`, `needs_review=true`; không gán `relevant` chỉ vì ego dự định rẽ trái | 4, 7 |
 | Chờ ảnh example/calibration — E05 | Đầu đèn nhỏ, box đặt được; thấy rõ một màu đỏ nhưng không đọc được hình ký hiệu | `signal_type=unknown`, `state=red`; `ego_relevance=unknown` nếu thiếu bằng chứng độc lập về quan hệ; `needs_review=true` | 4, 6 |
-| Chờ ảnh example/calibration — E06 | Vỏ đặt khung được, tín hiệu đỏ/vàng không phân biệt chắc | `state=unknown`, `needs_review=true`; loại và quan hệ chỉ giữ nếu có bằng chứng riêng | 4, 6, 7 |
+| Chờ ảnh example/calibration — E06 | Vỏ đặt khung được, chỉ một bóng sáng nhưng không phân biệt chắc đỏ hay vàng | `state=unknown`, `needs_review=true`; loại và quan hệ chỉ giữ nếu có bằng chứng riêng | 4, 6, 7 |
 | Chờ ảnh example/calibration — E07 | Một đầu đèn xa thuộc luồng/giao lộ khác, có đủ bằng chứng phân biệt | Vẫn vẽ; `ego_relevance=not_relevant`; loại và màu theo quan sát, không bỏ vì xa | 5 |
 | Chờ ảnh example/calibration — E08 | Chấm sáng nhỏ nghi là đèn nhưng không xác định được vỏ để đặt box | Không vẽ box phỏng đoán; ghi issue CVAT chỉ vị trí để QA kiểm tra riêng | 3, 5, 7 |
 | Chờ ảnh example/calibration — E09 | Đèn trước/đèn hậu trên một xe nhận diện được | IGNORE: không có box `traffic_light` cho đèn xe | 5 |
@@ -191,8 +193,9 @@ Các tình huống dưới đây minh họa cách áp dụng rule; **chưa phả
 | Chờ ảnh example/calibration — E11 | Đầu đèn nhận diện được nhưng phần chứa bóng bị che; biên phần vỏ còn thấy xác định được | Box visible; thuộc tính không đọc được là `unknown`, `needs_review=true`; không lấy màu từ ảnh khác | 3, 6, 8 |
 | Chờ ảnh example/calibration — E12 | Mũi tên phải xanh; ego giả định rẽ phải; xác lập được đèn điều khiển đúng làn rẽ | `right_arrow/green/relevant`, `needs_review=false`; nếu thiếu bằng chứng làn thì quan hệ là `unknown` và bật review | 4 |
 | Chờ ảnh example/calibration — E13 | Mũi tên thẳng xanh; ego giả định đi thẳng; xác lập được đèn điều khiển đúng làn | `straight_arrow/green/relevant`, `needs_review=false`; không dùng `circular` cho mũi tên thẳng | 4 |
-| Chờ ảnh example/calibration — E14 | Đầu đèn có ký hiệu người đi bộ sáng trắng, vỏ và ký hiệu rõ | `pedestrian/white/not_relevant`, `needs_review=false`; vẫn vẽ, không đổi màu thành `green` | 4, 5 |
-| Chờ ảnh example/calibration — E15 | Đầu đèn cho người đi bộ có bàn tay sáng cam, vỏ và màu rõ | `pedestrian/orange/not_relevant`, `needs_review=false`; không đổi màu thành `red` | 4, 5 |
+| Chờ ảnh example/calibration — E14 | Đầu đèn có ký hiệu người đang đi sáng trắng, vỏ và ký hiệu rõ | `pedestrian/green/not_relevant`, `needs_review=false`; ghi theo ý nghĩa ký hiệu, không dùng `unknown` chỉ vì màu trắng | 4, 5 |
+| Chờ ảnh example/calibration — E15 | Đầu đèn cho người đi bộ có bàn tay sáng cam, vỏ và ký hiệu rõ | `pedestrian/red/not_relevant`, `needs_review=false`; ghi theo ý nghĩa ký hiệu | 4, 5 |
+| Chờ ảnh example/calibration — E16 | Đèn tròn cho xe có bóng đỏ và bóng vàng cùng sáng, nhìn rõ cả hai | `circular/red_yellow`; `ego_relevance` theo bằng chứng quan hệ; không chọn riêng `red` hay `yellow` | 4 |
 
 Trong cách viết tắt `loại/màu/quan hệ`, ba giá trị lần lượt là `signal_type/state/ego_relevance`. Điều kiện “đủ bằng chứng” trong mỗi ví dụ phải được chỉ ra cụ thể trên ảnh khi bổ sung, không được coi là đáp án chỉ vì nằm trong phần mô tả.
 
@@ -209,10 +212,11 @@ Trong cách viết tắt `loại/màu/quan hệ`, ba giá trị lần lượt l�
 | Box chỉ ôm bóng sáng hoặc bao cả quầng sáng/cột | Kiểm lại biên vỏ và dung sai 2 pixel ở ảnh gốc |
 | Đèn mờ hoặc bị che được gán `off` | Chỉ dùng `off` khi nhìn đủ vỏ và xác nhận không bóng nào sáng |
 | Phân vân màu thì chọn đỏ để thận trọng | Chọn `state=unknown`, `needs_review=true`; không tạo nhãn màu thiếu bằng chứng |
+| Dùng `red_yellow` khi chỉ phân vân một bóng là đỏ hay vàng | `red_yellow` chỉ khi thấy rõ hai bóng đỏ và vàng cùng sáng; phân vân thì `unknown` |
 | Để nguyên `unknown` mà chưa đọc ảnh, hoặc còn `unknown` nhưng không bật review | Kiểm từng dropdown; còn thiếu bằng chứng sau khi đọc thì giữ `unknown` và bật `needs_review` |
 | Dùng ảnh trước/sau để điền màu hoặc đoán phần vỏ bị che | Mỗi ảnh độc lập; chỉ dùng bằng chứng của ảnh hiện tại |
 | Box cần review nhưng chỉ ghi issue hoặc nhắn miệng | Lưu `needs_review=true` trên box; issue không có box được kiểm tra riêng, không coi là decision ESCALATE trong export |
-| Bỏ đèn đi bộ hoặc gán nó điều khiển ego vì đang sáng xanh/trắng | Vẫn vẽ với `signal_type=pedestrian`, `ego_relevance=not_relevant`; ghi đúng màu nhìn thấy |
+| Bỏ đèn đi bộ hoặc gán nó điều khiển ego vì đang sáng xanh/trắng | Vẫn vẽ với `signal_type=pedestrian`, `ego_relevance=not_relevant`; `state` theo ý nghĩa ký hiệu (người đi → `green`, bàn tay → `red`) |
 | Gán mũi tên thẳng là đèn tròn, hoặc đoán hướng mũi tên theo vị trí vỏ | Đọc hình ký hiệu, chọn `straight_arrow/left_arrow/right_arrow`; hình không rõ thì `unknown` |
 
 ### Checklist trước khi Save / export

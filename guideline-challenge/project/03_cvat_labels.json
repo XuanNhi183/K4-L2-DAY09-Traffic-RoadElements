@@ -15,7 +15,7 @@
         "name": "state",
         "input_type": "select",
         "mutable": false,
-        "values": ["red", "yellow", "green", "white", "orange", "off", "unknown"],
+        "values": ["red", "yellow", "red_yellow", "green", "off", "unknown"],
         "default_value": "unknown"
       },
       {
