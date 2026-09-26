@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "name": "traffic_light",
+    "color": "#00d0ff",
+    "type": "rectangle",
+    "attributes": [
+      {
+        "name": "signal_type",
+        "input_type": "select",
+        "mutable": false,
+        "values": ["circular", "left_arrow", "right_arrow", "straight_arrow", "pedestrian", "unknown"],
+        "default_value": "unknown"
+      },
+      {
+        "name": "state",
+        "input_type": "select",
+        "mutable": false,
+        "values": ["red", "yellow", "green", "white", "orange", "off", "unknown"],
+        "default_value": "unknown"
+      },
+      {
+        "name": "ego_relevance",
+        "input_type": "select",
+        "mutable": false,
+        "values": ["relevant", "not_relevant", "unknown"],
+        "default_value": "unknown"
+      },
+      {
+        "name": "needs_review",
+        "input_type": "checkbox",
+        "mutable": false,
+        "values": ["false"],
+        "default_value": "false"
+      }
+    ]
+  }
+]
