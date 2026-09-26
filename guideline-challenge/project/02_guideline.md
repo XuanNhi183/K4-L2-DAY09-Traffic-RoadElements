@@ -195,8 +195,6 @@ Các tình huống dưới đây minh họa cách áp dụng rule; **chưa phả
 | Chờ ảnh example/calibration — E02 | Mũi tên trái đỏ và đèn tròn xanh nằm ở hai vỏ riêng; hướng giả định rẽ trái; xác lập được mũi tên cho làn rẽ ego, đèn tròn chỉ cho làn đi thẳng | Hai box: mũi tên `left_arrow/red/relevant`; đèn tròn `circular/green/not_relevant`; cả hai `needs_review=false` | 2, 4; không gán xanh chung cho ego |
 | Chờ ảnh example/calibration — E03 | Bố trí như E02, nhưng hướng giả định đi thẳng và đủ bằng chứng quan hệ làn | Mũi tên `left_arrow/red/not_relevant`; đèn tròn `circular/green/relevant`; vẫn giữ màu đỏ của đèn không áp dụng | 4, 5 |
 
-Trong cách viết tắt `loại/màu/quan hệ`, ba giá trị lần lượt là `signal_type/state/ego_relevance`. Điều kiện “đủ bằng chứng” trong mỗi ví dụ phải được chỉ ra cụ thể trên ảnh khi bổ sung, không được coi là đáp án chỉ vì nằm trong phần mô tả.
-
 ## 10. Common mistakes
 
 | Lỗi thường gặp | Cách tránh / kiểm tra |
