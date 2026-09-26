@@ -1,1 +1,13 @@
 sample_id,split,tags,reason
+LISA01,example,normal,cả ba đầu đèn đỏ; minh hoạ một box cho một vỏ và cách đọc mũi tên trái
+LISA16,example,conflict,frame đầu tròn xanh + mũi tên trái đỏ; minh hoạ E02/E03
+LISA20,example,conflict;small_far,đèn tròn xa bên phải sát cây; minh hoạ vẫn vẽ đèn xa
+LISA03,calibration,normal,pha đỏ; kiểm tra đồng thuận box và signal_type
+LISA06,calibration,small_far;occlusion,đèn phải bị tán cây che một phần; kiểm tra rule visible
+LISA14,calibration,edge,cuối pha đỏ; kiểm tra ego_relevance của mũi tên trái khi mọi đèn cùng đỏ
+LISA18,calibration,conflict;critical,tròn xanh + mũi tên đỏ; kiểm tra đèn nào relevant
+LISA22,calibration,conflict;edge,tròn xanh + mũi tên đỏ; kiểm tra màu của đèn không áp dụng vẫn được ghi
+LISA10,blind,normal,pha đỏ rõ ràng; ba đầu đèn cùng đỏ
+LISA25,blind,critical;conflict,tròn xanh + mũi tên trái đỏ; gán nhầm xanh cho hướng rẽ trái là lỗi nặng nhất
+LISA27,blind,edge;conflict,hai đèn tròn xanh; kiểm tra nhiều đầu đèn cùng relevant
+LISA29,blind,edge;small_far,đèn tròn xa sát cây; kiểm tra có vẽ và đặt box đúng không

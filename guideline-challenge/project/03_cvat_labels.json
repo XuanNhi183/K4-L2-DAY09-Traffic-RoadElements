@@ -8,22 +8,22 @@
         "name": "signal_type",
         "input_type": "select",
         "mutable": false,
-        "values": ["circular", "left_arrow", "right_arrow", "straight_arrow", "pedestrian", "unknown"],
-        "default_value": "unknown"
+        "values": ["__undefined__", "circular", "left_arrow", "right_arrow", "straight_arrow", "pedestrian", "unknown"],
+        "default_value": "__undefined__"
       },
       {
         "name": "state",
         "input_type": "select",
         "mutable": false,
-        "values": ["red", "yellow", "red_yellow", "green", "off", "unknown"],
-        "default_value": "unknown"
+        "values": ["__undefined__", "red", "yellow", "red_yellow", "green", "off", "unknown"],
+        "default_value": "__undefined__"
       },
       {
         "name": "ego_relevance",
         "input_type": "select",
         "mutable": false,
-        "values": ["relevant", "not_relevant", "unknown"],
-        "default_value": "unknown"
+        "values": ["__undefined__", "relevant", "not_relevant", "unknown"],
+        "default_value": "__undefined__"
       },
       {
         "name": "needs_review",

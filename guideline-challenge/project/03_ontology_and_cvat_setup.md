@@ -8,18 +8,18 @@ placeholder mới là xong (gate G2).
 | Name | Geometry | Type (class / attribute) | Allowed values | Default | Mutable? | Rationale |
 |---|---|---|---|---|---|---|
 | `traffic_light` | `rectangle` | class | Không áp dụng | Không áp dụng | Không áp dụng | Một đối tượng cho một vỏ đầu đèn cho xe hoặc người đi bộ; không chia class theo màu hoặc hướng |
-| `signal_type` | Trên box `traffic_light` | attribute — select | `circular`, `left_arrow`, `right_arrow`, `straight_arrow`, `pedestrian`, `unknown` | `unknown` | Không | Phân biệt tín hiệu tròn, mũi tên trái/phải/thẳng và tín hiệu người đi bộ; không đủ bằng chứng thì `unknown` |
-| `state` | Trên box `traffic_light` | attribute — select | `red`, `yellow`, `red_yellow`, `green`, `off`, `unknown` | `unknown` | Không | Ghi màu/trạng thái quan sát được; `red_yellow` khi bóng đỏ và bóng vàng cùng sáng trong một vỏ; đèn đi bộ ghi theo ý nghĩa ký hiệu: người đi → `green`, bàn tay/người đứng → `red` |
-| `ego_relevance` | Trên box `traffic_light` | attribute — select | `relevant`, `not_relevant`, `unknown` | `unknown` | Không | Quan hệ điều khiển trực tiếp với hướng đi giả định; đèn đi bộ chắc chắn là `not_relevant`, không có nghĩa người đi bộ không ảnh hưởng việc lái xe |
+| `signal_type` | Trên box `traffic_light` | attribute — select | `circular`, `left_arrow`, `right_arrow`, `straight_arrow`, `pedestrian`, `unknown` | `__undefined__` (chưa chọn) | Không | Phân biệt tín hiệu tròn, mũi tên trái/phải/thẳng và tín hiệu người đi bộ; không đủ bằng chứng thì `unknown` |
+| `state` | Trên box `traffic_light` | attribute — select | `red`, `yellow`, `red_yellow`, `green`, `off`, `unknown` | `__undefined__` (chưa chọn) | Không | Ghi màu/trạng thái quan sát được; `red_yellow` khi bóng đỏ và bóng vàng cùng sáng trong một vỏ; đèn đi bộ ghi theo ý nghĩa ký hiệu: người đi → `green`, bàn tay/người đứng → `red` |
+| `ego_relevance` | Trên box `traffic_light` | attribute — select | `relevant`, `not_relevant`, `unknown` | `__undefined__` (chưa chọn) | Không | Quan hệ điều khiển trực tiếp với hướng đi giả định; đèn đi bộ chắc chắn là `not_relevant`, không có nghĩa người đi bộ không ảnh hưởng việc lái xe |
 | `needs_review` | Trên box `traffic_light` | attribute — checkbox | `false`, `true` | `false` | Không | Đánh dấu đối tượng có thông tin chưa xác định hoặc cần reviewer xử lý |
 
-Checkbox trong CVAT Raw dùng `values=["false"]`, `default_value="false"`; khi gán nhãn, trạng thái trên đối tượng là `true` hoặc `false`. Các dropdown mặc định `unknown`. Annotator phải kiểm tra từng trường; khi hoàn thành mà vẫn thiếu bằng chứng thì giữ `unknown` và bật `needs_review=true`.
+Checkbox trong CVAT Raw dùng `values=["false"]`, `default_value="false"`; khi gán nhãn, trạng thái trên đối tượng là `true` hoặc `false`. Ba dropdown mặc định `__undefined__`: trong `03_cvat_labels.json`, `__undefined__` đứng đầu `values` và là `default_value`, nhưng **không phải giá trị được phép nộp**, nên cột Allowed values không liệt kê nó. Annotator phải tự chọn từng trường; khi đã đọc ảnh mà vẫn thiếu bằng chứng thì chọn `unknown` và bật `needs_review=true`. Export còn `__undefined__` nghĩa là quên gán.
 
 ## Class hay attribute
 
 `traffic_light` là class vì các đầu đèn cho xe và người đi bộ dùng chung đơn vị vỏ đèn và geometry rectangle. Loại tín hiệu, màu và quan hệ với ego là các thuộc tính của đầu đèn, nên không tạo class riêng cho từng tổ hợp. Đèn đi bộ dùng `signal_type=pedestrian`, `ego_relevance=not_relevant`; `state` ghi theo ý nghĩa ký hiệu đang sáng (người đi → `green`, bàn tay/người đứng → `red`) vì schema không có màu trắng/cam. Đối tượng cần kiểm tra dùng `needs_review`; vấn đề không gắn được với box được ghi bằng issue CVAT, không tạo label cấp ảnh.
 
-Các dropdown mặc định `unknown` để tránh tự tạo nhãn `red`, `circular` hoặc `relevant` khi annotator quên chọn. Giá trị mặc định không chứng minh đối tượng đã được kiểm tra; annotator phải đọc đủ từng trường trước khi nộp. `needs_review` mặc định `false`, phải bật khi có thuộc tính `unknown` hoặc vấn đề cần review. Task ảnh tĩnh dùng Shape, mọi attribute đặt `mutable=false`.
+Các dropdown mặc định `__undefined__` thay vì một giá trị thật: nếu mặc định là `red`, `circular` hoặc `relevant`, annotator quên chọn sẽ tạo nhãn "im lặng"; nếu mặc định là `unknown`, export không phân biệt được "quên chọn" với "đã xem nhưng không đủ bằng chứng". Với `__undefined__`, mọi giá trị trong export đều là lựa chọn có chủ ý, và `py lab9.py calib` tách được lỗi quên gán khỏi bất đồng thật. `needs_review` mặc định `false`, phải bật khi có thuộc tính `unknown` hoặc vấn đề cần review. Task ảnh tĩnh dùng Shape, mọi attribute đặt `mutable=false`.
 
 ## CVAT
 

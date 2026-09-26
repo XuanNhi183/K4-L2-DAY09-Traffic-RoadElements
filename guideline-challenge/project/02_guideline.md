@@ -63,14 +63,14 @@ Chỉ có một class đối tượng `traffic_light`. Loại tín hiệu, màu 
 | Name | Gắn vào / geometry | Kiểu nhập | Allowed values | Default |
 |---|---|---|---|---|
 | `traffic_light` | Class đối tượng / `rectangle` | Rectangle Shape | Không áp dụng | Không áp dụng |
-| `signal_type` | Attribute của `traffic_light` | Select | `circular`, `left_arrow`, `right_arrow`, `straight_arrow`, `pedestrian`, `unknown` | `unknown` |
-| `state` | Attribute của `traffic_light` | Select | `red`, `yellow`, `red_yellow`, `green`, `off`, `unknown` | `unknown` |
-| `ego_relevance` | Attribute của `traffic_light` | Select | `relevant`, `not_relevant`, `unknown` | `unknown` |
+| `signal_type` | Attribute của `traffic_light` | Select | `circular`, `left_arrow`, `right_arrow`, `straight_arrow`, `pedestrian`, `unknown` | `__undefined__` (chưa chọn) |
+| `state` | Attribute của `traffic_light` | Select | `red`, `yellow`, `red_yellow`, `green`, `off`, `unknown` | `__undefined__` (chưa chọn) |
+| `ego_relevance` | Attribute của `traffic_light` | Select | `relevant`, `not_relevant`, `unknown` | `__undefined__` (chưa chọn) |
 | `needs_review` | Attribute của `traffic_light` | Checkbox | `false`, `true` | `false` |
 
 Task ảnh tĩnh dùng attribute không mutable. Trong cấu hình Raw CVAT, checkbox có `input_type=checkbox`, `default_value="false"`, `values=["false"]`; trạng thái được lưu trên đối tượng là `true` hoặc `false`.
 
-Ba dropdown mặc định `unknown`. Annotator phải kiểm tra từng thuộc tính, không để nguyên mặc định thay cho việc đọc ảnh. Sau khi kiểm tra, thuộc tính vẫn chưa đủ bằng chứng được giữ `unknown` và phải đi kèm `needs_review=true`. Export không tự phân biệt một giá trị mặc định bị bỏ quên với quyết định chưa xác định; reviewer phải kiểm tra các trường này. Tên và giá trị phải được đồng bộ nguyên văn trong `03_ontology_and_cvat_setup.md` và `03_cvat_labels.json`; không dùng xen kẽ tên từ bản guideline khác.
+Ba dropdown mặc định `__undefined__` (nghĩa là **chưa chọn**). `__undefined__` không phải giá trị được phép nộp: annotator phải tự chọn một giá trị cho từng dropdown của mọi box. Sau khi đọc ảnh mà thuộc tính vẫn chưa đủ bằng chứng thì chủ động chọn `unknown` và bật `needs_review=true`. Box nào trong export còn `__undefined__` là lỗi quên gán thuộc tính đó, không được hiểu là `unknown`. Tên và giá trị phải được đồng bộ nguyên văn trong `03_ontology_and_cvat_setup.md` và `03_cvat_labels.json`; không dùng xen kẽ tên từ bản guideline khác.
 
 ### Cách chọn `signal_type` và `state`
 
@@ -161,7 +161,7 @@ Reviewer đối chiếu từng ảnh theo cùng thứ tự để lỗi không b�
 
 1. **Đếm instance:** rà toàn ảnh theo thứ tự trái sang phải, trên xuống dưới; ghi nhận đầu đèn bị bỏ sót, box thừa hoặc box trùng. Một instance là một vỏ vật lý theo mục 2.
 2. **Ghép box với vỏ:** đối chiếu từng box với đúng vỏ đèn trong ảnh; kiểm tra box ôm phần vỏ nhìn thấy theo mục 3. Không xem thuộc tính đúng là bù cho box sai, thiếu hoặc trùng.
-3. **Đối chiếu thuộc tính riêng:** với từng box đã ghép, kiểm `signal_type`, `state`, rồi `ego_relevance` theo mục 4. Chỉ đánh giá mỗi thuộc tính bằng bằng chứng ảnh và hướng giả định đã ghi cho task.
+3. **Đối chiếu thuộc tính riêng:** với từng box đã ghép, kiểm `signal_type`, `state`, rồi `ego_relevance` theo mục 4. Thuộc tính còn `__undefined__` ghi là lỗi của thuộc tính đó (quên gán), không coi là `unknown`. Chỉ đánh giá mỗi thuộc tính bằng bằng chứng ảnh và hướng giả định đã ghi cho task.
 4. **Kiểm tra review:** nếu một thuộc tính là `unknown` hoặc đối tượng cần QA xử lý, xác nhận `needs_review=true`. Nếu còn vấn đề không gắn được với box, tìm issue CVAT tương ứng.
 
 Ghi từng sai khác theo ảnh và loại lỗi: **missing/extra/duplicate instance**, **geometry**, **signal_type**, **state**, **ego_relevance** hoặc **review flag**. Không gộp nhiều sai khác thành một lỗi duy nhất; nếu phân vân giữa hai giá trị, ghi bằng chứng quan sát được và áp dụng quy tắc UNKNOWN/ESCALATE ở trên. Cách phân loại này giúp so sánh annotator theo từng phần của bài toán và chỉ ra khâu cần hiệu chỉnh.
@@ -194,19 +194,6 @@ Các tình huống dưới đây minh họa cách áp dụng rule; **chưa phả
 | Chờ ảnh example/calibration — E01 | Đầu đèn tròn đỏ, biên vỏ rõ; hướng giả định đi thẳng; đủ bằng chứng đèn điều khiển đúng làn ego | Một box: `signal_type=circular`, `state=red`, `ego_relevance=relevant`, `needs_review=false` | 2, 3, 4 |
 | Chờ ảnh example/calibration — E02 | Mũi tên trái đỏ và đèn tròn xanh nằm ở hai vỏ riêng; hướng giả định rẽ trái; xác lập được mũi tên cho làn rẽ ego, đèn tròn chỉ cho làn đi thẳng | Hai box: mũi tên `left_arrow/red/relevant`; đèn tròn `circular/green/not_relevant`; cả hai `needs_review=false` | 2, 4; không gán xanh chung cho ego |
 | Chờ ảnh example/calibration — E03 | Bố trí như E02, nhưng hướng giả định đi thẳng và đủ bằng chứng quan hệ làn | Mũi tên `left_arrow/red/not_relevant`; đèn tròn `circular/green/relevant`; vẫn giữ màu đỏ của đèn không áp dụng | 4, 5 |
-| Chờ ảnh example/calibration — E04 | Đọc được mũi tên trái đỏ nhưng không xác lập được làn/hướng nó điều khiển | `left_arrow/red/unknown`, `needs_review=true`; không gán `relevant` chỉ vì ego dự định rẽ trái | 4, 7 |
-| Chờ ảnh example/calibration — E05 | Đầu đèn nhỏ, box đặt được; thấy rõ một màu đỏ nhưng không đọc được hình ký hiệu | `signal_type=unknown`, `state=red`; `ego_relevance=unknown` nếu thiếu bằng chứng độc lập về quan hệ; `needs_review=true` | 4, 6 |
-| Chờ ảnh example/calibration — E06 | Vỏ đặt khung được, chỉ một bóng sáng nhưng không phân biệt chắc đỏ hay vàng | `state=unknown`, `needs_review=true`; loại và quan hệ chỉ giữ nếu có bằng chứng riêng | 4, 6, 7 |
-| Chờ ảnh example/calibration — E07 | Một đầu đèn xa thuộc luồng/giao lộ khác, có đủ bằng chứng phân biệt | Vẫn vẽ; `ego_relevance=not_relevant`; loại và màu theo quan sát, không bỏ vì xa | 5 |
-| Chờ ảnh example/calibration — E08 | Chấm sáng nhỏ nghi là đèn nhưng không xác định được vỏ để đặt box | Không vẽ box phỏng đoán; ghi issue CVAT chỉ vị trí để QA kiểm tra riêng | 3, 5, 7 |
-| Chờ ảnh example/calibration — E09 | Đèn trước/đèn hậu trên một xe nhận diện được | IGNORE: không có box `traffic_light` cho đèn xe | 5 |
-| Chờ ảnh example/calibration — E10 | Nhiều đầu đèn riêng cùng điều khiển hướng ego, từng quan hệ đã có bằng chứng | Vẽ từng vỏ, mỗi vỏ `ego_relevance=relevant`; ghi màu riêng, không ép chỉ một đèn relevant | 2, 4 |
-| Chờ ảnh example/calibration — E11 | Đầu đèn nhận diện được nhưng phần chứa bóng bị che; biên phần vỏ còn thấy xác định được | Box visible; thuộc tính không đọc được là `unknown`, `needs_review=true`; không lấy màu từ ảnh khác | 3, 6, 8 |
-| Chờ ảnh example/calibration — E12 | Mũi tên phải xanh; ego giả định rẽ phải; xác lập được đèn điều khiển đúng làn rẽ | `right_arrow/green/relevant`, `needs_review=false`; nếu thiếu bằng chứng làn thì quan hệ là `unknown` và bật review | 4 |
-| Chờ ảnh example/calibration — E13 | Mũi tên thẳng xanh; ego giả định đi thẳng; xác lập được đèn điều khiển đúng làn | `straight_arrow/green/relevant`, `needs_review=false`; không dùng `circular` cho mũi tên thẳng | 4 |
-| Chờ ảnh example/calibration — E14 | Đầu đèn có ký hiệu người đang đi sáng trắng, vỏ và ký hiệu rõ | `pedestrian/green/not_relevant`, `needs_review=false`; ghi theo ý nghĩa ký hiệu, không dùng `unknown` chỉ vì màu trắng | 4, 5 |
-| Chờ ảnh example/calibration — E15 | Đầu đèn cho người đi bộ có bàn tay sáng cam, vỏ và ký hiệu rõ | `pedestrian/red/not_relevant`, `needs_review=false`; ghi theo ý nghĩa ký hiệu | 4, 5 |
-| Chờ ảnh example/calibration — E16 | Đèn tròn cho xe có bóng đỏ và bóng vàng cùng sáng, nhìn rõ cả hai | `circular/red_yellow`; `ego_relevance` theo bằng chứng quan hệ; không chọn riêng `red` hay `yellow` | 4 |
 
 Trong cách viết tắt `loại/màu/quan hệ`, ba giá trị lần lượt là `signal_type/state/ego_relevance`. Điều kiện “đủ bằng chứng” trong mỗi ví dụ phải được chỉ ra cụ thể trên ảnh khi bổ sung, không được coi là đáp án chỉ vì nằm trong phần mô tả.
 
@@ -224,7 +211,7 @@ Trong cách viết tắt `loại/màu/quan hệ`, ba giá trị lần lượt l�
 | Đèn mờ hoặc bị che được gán `off` | Chỉ dùng `off` khi nhìn đủ vỏ và xác nhận không bóng nào sáng |
 | Phân vân màu thì chọn đỏ để thận trọng | Chọn `state=unknown`, `needs_review=true`; không tạo nhãn màu thiếu bằng chứng |
 | Dùng `red_yellow` khi chỉ phân vân một bóng là đỏ hay vàng | `red_yellow` chỉ khi thấy rõ hai bóng đỏ và vàng cùng sáng; phân vân thì `unknown` |
-| Để nguyên `unknown` mà chưa đọc ảnh, hoặc còn `unknown` nhưng không bật review | Kiểm từng dropdown; còn thiếu bằng chứng sau khi đọc thì giữ `unknown` và bật `needs_review` |
+| Bỏ sót dropdown (export còn `__undefined__`), chọn `unknown` mà chưa đọc ảnh, hoặc chọn `unknown` nhưng không bật review | Chọn đủ ba dropdown cho mọi box; còn thiếu bằng chứng sau khi đọc thì chọn `unknown` và bật `needs_review` |
 | Dùng ảnh trước/sau để điền màu hoặc đoán phần vỏ bị che | Mỗi ảnh độc lập; chỉ dùng bằng chứng của ảnh hiện tại |
 | Box cần review nhưng chỉ ghi issue hoặc nhắn miệng | Lưu `needs_review=true` trên box; issue không có box được kiểm tra riêng, không coi là decision ESCALATE trong export |
 | Bỏ đèn đi bộ hoặc gán nó điều khiển ego vì đang sáng xanh/trắng | Vẫn vẽ với `signal_type=pedestrian`, `ego_relevance=not_relevant`; `state` theo ý nghĩa ký hiệu (người đi → `green`, bàn tay → `red`) |
@@ -235,7 +222,7 @@ Trong cách viết tắt `loại/màu/quan hệ`, ba giá trị lần lượt l�
 - [ ] Đã đọc hướng giả định; không tự suy ra ý định thực tế của xe.
 - [ ] Đã quét toàn ảnh; mỗi đầu đèn nhận diện và đặt khung được có đúng một box.
 - [ ] Mỗi box thuộc `traffic_light`, đúng phần vỏ nhìn thấy và dung sai; không vẽ đèn xe/biển báo.
-- [ ] Đã kiểm tra cả ba dropdown của từng box, không giữ `unknown` do bỏ quên, không dùng tên/giá trị ngoài mục 4.
+- [ ] Đã chọn cả ba dropdown của từng box: không box nào còn `__undefined__`, không chọn `unknown` thay cho việc đọc ảnh, không dùng tên/giá trị ngoài mục 4.
 - [ ] Loại và màu được ghi độc lập với `ego_relevance`, kể cả đầu đèn không áp dụng.
 - [ ] Mọi `relevant`/`not_relevant` đều có bằng chứng quan hệ; không ép số lượng đèn relevant.
 - [ ] Có ít nhất một attribute `unknown` thì `needs_review=true`; vấn đề không gắn được với box đã ghi issue CVAT.
