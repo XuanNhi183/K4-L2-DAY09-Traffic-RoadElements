@@ -1,4 +1,4 @@
-# Annotation guideline — Đèn giao thông áp dụng cho hướng đi dự kiến của ego vehicle trong ảnh LISA
+# Annotation guideline — Đèn giao thông áp dụng cho ego vehicle đi thẳng (ảnh LISA và BDD100K)
 
 **Version:** v2
 
@@ -16,23 +16,24 @@ Ví dụ trong guideline chỉ dùng ảnh split example hoặc calibration, kh�
 
 ### Mục tiêu
 
-Với từng ảnh LISA, khoanh các đầu đèn giao thông dành cho xe và người đi bộ, ghi loại tín hiệu và trạng thái nhìn thấy, sau đó xác định đầu đèn nào trực tiếp điều khiển hướng di chuyển dự kiến của ego vehicle (xe gắn camera). Tình huống trọng tâm là đèn tròn xanh xuất hiện đồng thời với mũi tên trái đỏ ở các đầu đèn riêng biệt. Đèn đi bộ được gán nhãn để phân biệt với tín hiệu cho xe.
+Với từng ảnh (LISA hoặc BDD100K), khoanh các đầu đèn giao thông dành cho xe và người đi bộ, ghi loại tín hiệu và trạng thái nhìn thấy, sau đó xác định đầu đèn nào trực tiếp điều khiển hướng đi thẳng của ego vehicle (xe gắn camera). Tình huống trọng tâm là đèn tròn xanh xuất hiện đồng thời với mũi tên trái đỏ ở các đầu đèn riêng biệt: với xe đi thẳng, đèn tròn là tín hiệu áp dụng, mũi tên trái đỏ thì không. Ảnh BDD100K áp dụng cùng quy tắc cho đèn đi bộ, ảnh ban đêm, mưa, tuyết, chạng vạng, đèn nhỏ/xa và đầu đèn nhìn từ cạnh. Đèn đi bộ được gán nhãn để phân biệt với tín hiệu cho xe.
 
 Output phục vụ mô hình nhận diện tín hiệu liên quan đến ego. Không suy ra lệnh lái xe, quyền ưu tiên, việc được phép rẽ hay quyết định đi/dừng. Một màu xanh nhìn thấy trong ảnh không tự động là tín hiệu áp dụng cho ego.
 
 ### Đầu vào bắt buộc: hướng đi dự kiến
 
-- Trong CVAT, người tạo task ghi một dòng theo đúng mẫu ở đầu **Task description** (ô Markdown dùng để dán guideline), trước nội dung guideline: **“Hướng di chuyển giả định của ego: đi thẳng”**, **“Hướng di chuyển giả định của ego: rẽ trái”** hoặc **“Hướng di chuyển giả định của ego: rẽ phải”**. Dùng cùng một dòng cho tất cả annotator và peer làm cùng task. Đây là giả định của bài đánh giá, không phải ý định thực tế suy ra từ ảnh.
-- Một task dùng một hướng giả định thống nhất. Annotator không tự đổi hướng giữa các ảnh. Hướng này phải giống nhau giữa các annotator và giữa owner với peer khi chấm cùng task.
-- Vạch/mũi tên trên đường dùng để xác định làn và kiểm tra quan hệ đèn–làn, không thay thế đầu vào hướng đi. Không mặc định đi thẳng khi ảnh thiếu thông tin; không suy ra xe đang rẽ chỉ vì đường cong.
-- Nếu thiếu hướng, có hai hướng mâu thuẫn hoặc hướng ngoài phạm vi đi thẳng/rẽ trái/rẽ phải: vẫn ghi geometry, loại và trạng thái đèn; đặt `ego_relevance=unknown`, `needs_review=true` cho các đầu đèn chưa giải quyết được quan hệ và ghi issue CVAT về đầu vào chưa rõ. Đèn đã xác định chắc chắn là đèn đi bộ vẫn có `ego_relevance=not_relevant`. Người tạo task phải làm rõ đầu vào; không tự chọn một hướng.
+- **Bài này dùng một hướng cố định cho mọi ảnh và mọi task, kể cả task của nhóm peer: ego đi thẳng qua giao lộ.** Người tạo task ghi đúng dòng sau ở đầu **Task description** (ô Markdown dùng để dán guideline), trước nội dung guideline: **“Hướng di chuyển giả định của ego: đi thẳng”**. Đây là giả định của bài đánh giá, không phải ý định thực tế suy ra từ ảnh.
+- Annotator không tự đổi hướng giữa các ảnh, kể cả khi ảnh cho thấy xe có thể rẽ. Owner và peer chấm theo cùng hướng này.
+- Vạch/mũi tên trên đường dùng để xác định làn và kiểm tra quan hệ đèn–làn, không thay thế đầu vào hướng đi. Không suy ra xe đang rẽ chỉ vì đường cong.
+- Nếu ảnh cho thấy ego đang ở làn chỉ được rẽ (ví dụ mũi tên rẽ trên mặt đường của làn ego) nên hướng đi thẳng không khớp với làn: không tự đổi hướng; vẫn ghi geometry, loại và trạng thái đèn; đặt `ego_relevance=unknown`, `needs_review=true` cho các đầu đèn cho xe chưa giải quyết được quan hệ và ghi issue CVAT. Đèn đã xác định chắc chắn là đèn đi bộ vẫn có `ego_relevance=not_relevant`.
 
 ### Phạm vi
 
 - Trong scope: đầu đèn giao thông dành cho xe hoặc người đi bộ nhận diện được trong ảnh, kể cả đèn nhỏ/xa, đèn không áp dụng cho ego và đèn có trạng thái chưa rõ.
 - Ngoài scope: đèn gắn trên xe, đèn đường chiếu sáng, biển báo và hình phản chiếu của đèn. Quy tắc cụ thể ở mục 5.
-- Ảnh nguồn: `data/lisa/`, 30 frame cùng một clip. Xét từng ảnh độc lập. Không mặc định mọi đèn trong ảnh đều thuộc giao lộ của ego hoặc cùng điều khiển một hướng.
-- Các giá trị bổ sung cho mũi tên phải/thẳng và đèn đi bộ chỉ được dùng khi ảnh có bằng chứng tương ứng; schema hỗ trợ không có nghĩa clip đã có đủ mọi loại để kiểm thử.
+- Ảnh nguồn: `data/lisa/` (30 frame cùng một clip, 1280 × 960) và `data/bdd100k/` (ảnh đơn lẻ nhiều cảnh, 1280 × 720, có ảnh ban đêm, mưa, tuyết, chạng vạng). Xét từng ảnh độc lập. Không mặc định mọi đèn trong ảnh đều thuộc giao lộ của ego hoặc cùng điều khiển một hướng.
+- Ảnh có thể không có đầu đèn nào trong scope; khi đó không vẽ gì (mục 5).
+- Các giá trị mũi tên phải/thẳng, `red_yellow` và đèn đi bộ chỉ được dùng khi ảnh có bằng chứng tương ứng; schema hỗ trợ không có nghĩa bộ ảnh có đủ mọi loại.
 
 ## 2. Annotation unit
 
@@ -49,7 +50,7 @@ Output phục vụ mô hình nhận diện tín hiệu liên quan đến ego. Kh
 2. Khung ôm **vỏ đầu đèn**, không chỉ ôm bóng đang sáng. Không gồm cột, cần vươn, giá đỡ, biển bên cạnh, tấm nền rộng phía sau vỏ hoặc quầng sáng. Phần chụp che nắng gắn liền với vỏ nằm trong khung.
 3. Dùng quy tắc **visible**, không phải amodal: không kéo dài box để đoán phần bị che hoặc phần ngoài ảnh. Nếu nhiều mảnh của cùng vỏ còn nhìn thấy, lấy khung chữ nhật nhỏ nhất chứa các mảnh đó; khung có thể bao cả vùng che nằm giữa chúng.
 4. Vỏ bị cắt ở mép ảnh: cạnh tương ứng của box dừng tại mép ảnh. Không tạo tọa độ ngoài ảnh. Đánh dấu thuộc tính chưa đọc được theo mục 6.
-5. **Dung sai:** mỗi cạnh được lệch tối đa 2 pixel so với khung tham chiếu theo quy tắc trên, tính trên ảnh gốc 1280 × 960, không phải pixel màn hình sau khi zoom. Box vẫn phải có chiều rộng và chiều cao dương. Dung sai không cho phép đổi từ “vỏ đèn” sang “bóng sáng”.
+5. **Dung sai:** mỗi cạnh được lệch tối đa 2 pixel so với khung tham chiếu theo quy tắc trên, tính trên kích thước gốc của ảnh (LISA 1280 × 960, BDD100K 1280 × 720), không phải pixel màn hình sau khi zoom. Box vẫn phải có chiều rộng và chiều cao dương. Dung sai không cho phép đổi từ “vỏ đèn” sang “bóng sáng”.
 6. Có thể phóng to để đặt cạnh, nhưng không tăng sáng, tô lại, dùng ảnh sinh hoặc suy ra đường viền từ ảnh khác. Nếu không thể xác định biên vỏ trong dung sai, không vẽ box giả định cho đối tượng đó; ghi vị trí cần xem lại trong issue CVAT. Các đầu đèn khác vẫn làm bình thường.
 
 Reviewer kiểm tọa độ export trên ảnh gốc và rule visible; không chấm theo một box amodal hoặc theo kích thước quầng sáng.
@@ -98,6 +99,7 @@ Thực hiện theo thứ tự:
 3. **Kiểm tra quan hệ của đầu đèn với làn/hướng đó.** Cần bằng chứng về mặt đèn hướng tới luồng xe của ego và sự liên hệ với làn, như biển/mũi tên chỉ làn rõ ràng hoặc bố trí đèn cùng đường dẫn làn nhìn thấy, không có một cách ghép khác hợp lý. Chỉ “ở giữa ảnh”, “gần xe nhất”, “đang xanh”, “cùng màu đèn bên cạnh” hoặc “treo phía trên” đều không đủ nếu quan hệ làn còn mơ hồ.
 4. **Chọn giá trị theo bảng dưới.** Nếu hướng giả định không phù hợp với làn nhìn thấy, không tự đổi hướng hay chuyển ego sang làn khác: đặt quan hệ chưa giải quyết là `unknown` và chuyển review.
 
+<<<<<<< HEAD
 | Hướng giả định và bằng chứng                                                                        | `ego_relevance`                                      |
 | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | Đi thẳng; xác lập được đèn tròn hoặc mũi tên thẳng điều khiển làn/luồng đi thẳng của ego            | `relevant`                                           |
@@ -110,6 +112,22 @@ Thực hiện theo thứ tự:
 | Xác định chắc chắn là đầu đèn cho người đi bộ                                                       | `not_relevant`, bất kể màu và hướng giả định của ego |
 | Đèn thuộc luồng xe khác hoặc giao lộ khác và có bằng chứng rõ                                       | `not_relevant`                                       |
 | Không xác định được làn, hướng mặt đèn, phạm vi điều khiển hoặc có bằng chứng mâu thuẫn             | `unknown`, `needs_review=true`                       |
+=======
+Bài này chỉ dùng hướng **đi thẳng**; các dòng rẽ trái/rẽ phải trong bảng giữ lại để schema dùng được cho bài khác, annotator của bài này không áp dụng chúng.
+
+| Hướng giả định và bằng chứng | `ego_relevance` |
+|---|---|
+| Đi thẳng; xác lập được đèn tròn hoặc mũi tên thẳng điều khiển làn/luồng đi thẳng của ego | `relevant` |
+| Đi thẳng; xác lập được đầu đèn chỉ điều khiển rẽ trái hoặc rẽ phải của làn rẽ riêng | `not_relevant` |
+| Rẽ trái; xác lập được mũi tên trái điều khiển đúng hướng/làn rẽ của ego | `relevant` |
+| Rẽ trái; xác lập được đèn tròn chỉ điều khiển các làn đi thẳng khác | `not_relevant` |
+| Rẽ phải; xác lập được mũi tên phải điều khiển đúng hướng/làn rẽ của ego | `relevant` |
+| Rẽ phải; xác lập được đầu đèn chỉ điều khiển làn đi thẳng hoặc rẽ trái khác | `not_relevant` |
+| Mũi tên thẳng/trái/phải điều khiển một hướng khác hướng ego đã cho, quan hệ điều khiển được xác lập | `not_relevant` |
+| Xác định chắc chắn là đầu đèn cho người đi bộ | `not_relevant`, bất kể màu và hướng giả định của ego |
+| Đèn thuộc luồng xe khác hoặc giao lộ khác và có bằng chứng rõ | `not_relevant` |
+| Không xác định được làn, hướng mặt đèn, phạm vi điều khiển hoặc có bằng chứng mâu thuẫn | `unknown`, `needs_review=true` |
+>>>>>>> c71c95aa956ae63f6f083a9327ae61fcf949e39a
 
 Không thấy mũi tên tương ứng không có nghĩa mọi đèn tròn đều áp dụng cho xe rẽ trái/rẽ phải. Mũi tên tắt không tự động chuyển quyền điều khiển sang đèn tròn. Các tình huống này chỉ kết luận khi có bằng chứng quan hệ; nếu thiếu thì `unknown`.
 
@@ -117,6 +135,7 @@ Một hướng có thể được điều khiển bởi nhiều đầu đèn: đ
 
 ## 5. Inclusion / exclusion
 
+<<<<<<< HEAD
 | Tình huống                                                                                 | Quyết định                                                                                                                           |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
 | Nhận diện chắc chắn một đầu đèn cho xe hoặc người đi bộ và xác định được phần vỏ nhìn thấy | Vẽ `traffic_light`, điền đủ attribute                                                                                                |
@@ -127,11 +146,25 @@ Một hướng có thể được điều khiển bởi nhiều đầu đèn: đ
 | Chắc chắn là đèn gắn trên xe, đèn chiếu sáng, biển báo hoặc hình phản chiếu                | IGNORE: không vẽ `traffic_light` cho vật đó                                                                                          |
 | Chỉ thấy chấm sáng, chưa biết có phải đầu đèn giao thông; hoặc không xác định được biên vỏ | Không tạo box phỏng đoán; ghi issue CVAT với vị trí cần xem lại                                                                      |
 | Không có đầu đèn trong scope và không có vùng nghi vấn                                     | Không vẽ box chỉ để lấp ảnh trống                                                                                                    |
+=======
+| Tình huống | Quyết định |
+|---|---|
+| Nhận diện chắc chắn một đầu đèn cho xe hoặc người đi bộ và xác định được phần vỏ nhìn thấy | Vẽ `traffic_light`, điền đủ attribute |
+| Nhận diện chắc chắn đầu đèn cho người đi bộ | Vẽ `traffic_light`, `signal_type=pedestrian`, `state` theo mục 4 (người đi → `green`, bàn tay → `red`), `ego_relevance=not_relevant` |
+| Đầu đèn không áp dụng cho ego nhưng vẫn nhận diện được | Vẫn vẽ; ghi loại/màu thật và `ego_relevance=not_relevant` nếu có đủ bằng chứng |
+| Đầu đèn xa, thuộc luồng khác hoặc giao lộ tiếp theo | Vẫn vẽ nếu nhận diện và đặt khung được; không bỏ chỉ vì ở xa. Quan hệ chắc chắn khác ego là `not_relevant`, chưa rõ là `unknown` |
+| Đầu đèn cho xe nhìn từ cạnh/sau, nhận diện được vỏ nhưng không thấy tín hiệu | Vẽ phần vỏ nhìn thấy; loại/trạng thái không đọc được là `unknown`, không gán `off`. Mặt đèn quay rõ sang luồng xe khác là bằng chứng `ego_relevance=not_relevant` |
+| Chắc chắn là đèn gắn trên xe, đèn chiếu sáng, biển báo hoặc hình phản chiếu | IGNORE: không vẽ `traffic_light` cho vật đó |
+| Ban đêm: chấm đỏ/vàng ở độ cao và vị trí của đèn hậu, đèn phanh, xi-nhan xe phía trước | IGNORE: đó là đèn gắn trên xe, dù màu giống đèn tín hiệu. Chỉ vẽ khi thấy được vỏ/cột/cần vươn của đầu đèn giao thông |
+| Chỉ thấy chấm sáng, chưa biết có phải đầu đèn giao thông; hoặc không xác định được biên vỏ | Không tạo box phỏng đoán; ghi issue CVAT với vị trí cần xem lại |
+| Không có đầu đèn trong scope và không có vùng nghi vấn | Không vẽ box chỉ để lấp ảnh trống |
+>>>>>>> c71c95aa956ae63f6f083a9327ae61fcf949e39a
 
 Không quy định số đầu đèn cố định cho một ảnh. Quét toàn ảnh, bao gồm vùng tối và các đèn nhỏ; không dừng sau khi tìm thấy các đèn lớn phía trên.
 
 ## 6. Visibility / occlusion
 
+<<<<<<< HEAD
 | Trường hợp                                               | Geometry                                          | Attribute / review                                                                                                                                  |
 | -------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Che một phần hoặc cắt mép ảnh                            | Khoanh phần vỏ còn thấy theo mục 3                | Giữ phần đọc được. Loại/màu/quan hệ nào thiếu bằng chứng thì `unknown`, `needs_review=true`                                                         |
@@ -141,6 +174,19 @@ Không quy định số đầu đèn cố định cho một ảnh. Quét toàn �
 | Chói, nhòe hoặc ánh sáng yếu                             | Khoanh theo vỏ, không theo vùng sáng lan          | Màu hoặc hình ký hiệu không chắc thì `unknown`; không “chọn màu an toàn hơn”                                                                        |
 | Chỉ thấy một bóng tối, không thấy đủ phần còn lại của vỏ | Khoanh nếu biên vỏ rõ                             | `state=unknown`, không kết luận toàn đầu đèn `off`                                                                                                  |
 | Phản chiếu trên kính/mặt đường                           | Không vẽ hình phản chiếu                          | Đầu đèn thật vẫn được xét độc lập nếu nhìn thấy                                                                                                     |
+=======
+| Trường hợp | Geometry | Attribute / review |
+|---|---|---|
+| Che một phần hoặc cắt mép ảnh | Khoanh phần vỏ còn thấy theo mục 3 | Giữ phần đọc được. Loại/màu/quan hệ nào thiếu bằng chứng thì `unknown`, `needs_review=true` |
+| Che hoàn toàn | Không suy ra vị trí để vẽ | Không tạo instance chỉ vì ảnh trước có đèn. Nếu ảnh hiện tại có bằng chứng một vùng cần kiểm tra nhưng không khoanh được, ghi issue CVAT kèm vị trí |
+| Đèn nhỏ/xa, vẫn nhận diện được vỏ và biên | Vẫn vẽ, không có ngưỡng loại chỉ theo khoảng cách | Đọc từng thuộc tính riêng. Không đủ rõ thì `unknown` và review |
+| Nhỏ đến mức không phân biệt vỏ với chấm sáng | Không vẽ box theo quầng sáng | Nếu nghi là đèn cần gán nhãn, ghi issue CVAT kèm vị trí |
+| Chói, nhòe hoặc ánh sáng yếu | Khoanh theo vỏ, không theo vùng sáng lan | Màu hoặc hình ký hiệu không chắc thì `unknown`; không “chọn màu an toàn hơn” |
+| Chỉ thấy một bóng tối, không thấy đủ phần còn lại của vỏ | Khoanh nếu biên vỏ rõ | `state=unknown`, không kết luận toàn đầu đèn `off` |
+| Phản chiếu trên kính/mặt đường | Không vẽ hình phản chiếu | Đầu đèn thật vẫn được xét độc lập nếu nhìn thấy |
+| Giọt mưa, vết bẩn trên kính chắn gió, giá đỡ camera hoặc logo che một phần | Coi như bị che: khoanh phần vỏ còn thấy theo mục 3 | Màu bị nhòe hoặc loang do giọt nước thì `state=unknown`, `needs_review=true` |
+| Tuyết, mưa hoặc chạng vạng làm ảnh mờ | Khoanh theo vỏ nếu biên vỏ xác định được | Đọc từng thuộc tính riêng; không đủ rõ thì `unknown` và review |
+>>>>>>> c71c95aa956ae63f6f083a9327ae61fcf949e39a
 
 Phóng to ảnh gốc giúp kiểm tra pixel, không tạo thêm bằng chứng. Khi hai cách đọc vẫn hợp lý sau khi quan sát, chuyển review; không dùng màu của xe khác, chuyển động của xe khác hay suy đoán chu kỳ đèn để chọn nhãn.
 
@@ -185,10 +231,9 @@ Không lấy trạng thái ở ảnh trước/sau để điền cho ảnh hiện
 
 ## 9. Examples
 
-Các tình huống dưới đây minh họa cách áp dụng rule; **chưa phải gold của một ảnh cụ thể**. Nhóm sẽ bổ sung ảnh/crop, mã `sample_id` và split sau khi chốt `sample_pack.csv`. Chỉ dùng ảnh `example` hoặc `calibration`, không dùng ảnh blind. Trước khi bàn giao, mỗi ví dụ giữ lại phải được đối chiếu với ảnh thật; tình huống không có trong dữ liệu phải bỏ hoặc ghi rõ là tình huống giả định.
+Hướng giả định trong mọi ví dụ là **đi thẳng**. Ví dụ có `sample_id` dùng ảnh split example; dòng ghi "giả định" là tình huống không có ảnh example tương ứng. Trong cách viết tắt `loại/màu/quan hệ`, ba giá trị lần lượt là `signal_type/state/ego_relevance`; nếu không ghi thì `needs_review=false`.
 
-Ảnh minh họa cần kèm toàn cảnh để thấy quan hệ làn–đèn và crop để đọc tín hiệu. Việc crop chỉ phục vụ minh họa; tọa độ annotation và dung sai vẫn tính trên ảnh gốc. Chưa gán `sample_id` trong bảng để tránh vô tình lấy một ảnh blind làm ví dụ.
-
+<<<<<<< HEAD
 | sample_id                         | Thấy gì                                                                                                                                         | Expected output                                                                                                 | Rule áp dụng                       |
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | Chờ ảnh example/calibration — E01 | Đầu đèn tròn đỏ, biên vỏ rõ; hướng giả định đi thẳng; đủ bằng chứng đèn điều khiển đúng làn ego                                                 | Một box: `signal_type=circular`, `state=red`, `ego_relevance=relevant`, `needs_review=false`                    | 2, 3, 4                            |
@@ -214,10 +259,45 @@ Các tình huống dưới đây minh họa cách áp dụng rule; **chưa phả
 | Box cần review nhưng chỉ ghi issue hoặc nhắn miệng                                                                       | Lưu `needs_review=true` trên box; issue không có box được kiểm tra riêng, không coi là decision ESCALATE trong export                 |
 | Bỏ đèn đi bộ hoặc gán nó điều khiển ego vì đang sáng xanh/trắng                                                          | Vẫn vẽ với `signal_type=pedestrian`, `ego_relevance=not_relevant`; `state` theo ý nghĩa ký hiệu (người đi → `green`, bàn tay → `red`) |
 | Gán mũi tên thẳng là đèn tròn, hoặc đoán hướng mũi tên theo vị trí vỏ                                                    | Đọc hình ký hiệu, chọn `straight_arrow/left_arrow/right_arrow`; hình không rõ thì `unknown`                                           |
+=======
+| sample_id | Thấy gì | Expected output | Rule áp dụng |
+|---|---|---|---|
+| LISA01 | Cần vươn phía trên giao lộ có ba vỏ đèn cho xe: mũi tên trái đỏ ở đầu trái (cạnh biển cấm quay đầu), đèn tròn đỏ ở giữa, đèn tròn đỏ bên phải sát tán cây; mũi tên trái nằm phía trên làn rẽ trái, hai đèn tròn treo phía trên các làn đi thẳng và quay mặt về ego. Phía xa, gần tòa nhà, có thêm vài vỏ đèn rất nhỏ | Ba box gần: mũi tên `left_arrow/red/not_relevant`; hai đèn tròn `circular/red/relevant`. Các vỏ nhỏ phía xa vẫn vẽ nếu đặt được khung, ghi màu quan sát; không xác lập được chúng thuộc giao lộ nào thì `ego_relevance=unknown`, `needs_review=true` | 2, 4, 5 |
+| LISA15 | Như LISA01; đèn tròn bên phải bị tán cây che một phần nhưng vẫn thấy bóng đỏ | Box chỉ ôm phần vỏ nhìn thấy, không kéo vào tán cây; `circular/red/relevant` | 3, 6 |
+| Giả định, bố trí như LISA01 | Đèn tròn đã chuyển xanh, mũi tên trái vẫn đỏ | Mũi tên `left_arrow/red/not_relevant`; hai đèn tròn `circular/green/relevant`. Vẫn ghi màu đỏ của mũi tên; không gán màu xanh cho vỏ mũi tên, không gán mũi tên đỏ là relevant | 2, 4 |
+| BDD07 | Đường một làn mỗi chiều, không có làn rẽ riêng. Một đầu đèn tròn xanh trên cột bên trái và một trên cần vươn phía trước, cả hai quay mặt về ego; cạnh mỗi đầu có một vỏ vàng nhìn từ cạnh, quay sang đường cắt ngang | Hai đèn quay về ego: `circular/green/relevant`. Mỗi vỏ nhìn từ cạnh vẫn vẽ: `signal_type=unknown`, `state=unknown`, `ego_relevance=not_relevant` (mặt quay sang luồng khác), `needs_review=true` vì còn thuộc tính `unknown`. Đèn xa hơn xét theo mục 5 | 4, 5 |
+| BDD11 | Đầu đèn đi bộ bên phải đường, ký hiệu bàn tay đang sáng đỏ | `pedestrian/red/not_relevant` | 4, 5 |
+| Giả định, ảnh ban đêm | Chấm đỏ ở độ cao đèn hậu của xe phía trước, không thấy vỏ/cột đèn giao thông | IGNORE: không vẽ box | 5 |
+| Giả định | Đầu đèn nhỏ, box đặt được; thấy rõ màu đỏ nhưng không đọc được hình tròn hay mũi tên | `signal_type=unknown`, `state=red`; `ego_relevance` theo bằng chứng quan hệ, thiếu thì `unknown`; `needs_review=true` | 4, 6 |
+| Giả định | Chấm sáng nhỏ nghi là đèn, không xác định được vỏ | Không vẽ box phỏng đoán; ghi issue CVAT kèm vị trí | 3, 5, 7 |
+| Giả định | Ảnh không có đầu đèn nào trong scope | Không vẽ box nào | 5 |
+
+## 10. Common mistakes
+
+| Lỗi thường gặp | Cách tránh / kiểm tra |
+|---|---|
+| Tự đổi hướng sang rẽ vì thấy làn rẽ hoặc đường cong | Hướng cố định là đi thẳng (mục 1); làn không khớp thì `unknown` + review, không đổi hướng |
+| Gán mũi tên trái đỏ là relevant cho xe đi thẳng | Mũi tên trái điều khiển làn rẽ trái; với xe đi thẳng, chỉ `relevant` khi có bằng chứng làn ego chịu mũi tên đó |
+| Ban đêm vẽ đèn hậu/đèn phanh xe phía trước thành đèn đỏ | Chỉ vẽ khi thấy vỏ/cột/cần vươn của đèn giao thông; đèn gắn trên xe là IGNORE |
+| Chọn đèn gần nhất, ở giữa ảnh hoặc đang xanh là relevant | Xác lập quan hệ làn–hướng–đèn theo mục 4; thiếu bằng chứng dùng `unknown` |
+| Thấy mũi tên trái ở bất kỳ vị trí nào là gán cho ego rẽ trái | Kiểm tra nó điều khiển đúng làn/luồng của ego trước |
+| Gán màu xanh của đèn tròn cho vỏ mũi tên trái đang đỏ | Mỗi vỏ là một instance; đọc loại và màu riêng trước khi gán relevance |
+| Bỏ đèn không áp dụng hoặc không ghi màu của nó | Đèn đó vẫn trong scope; giữ đủ attribute và dùng `not_relevant` khi có bằng chứng |
+| Gộp hai vỏ sát nhau hoặc vẽ từng bóng trong cùng vỏ | Một box cho một vỏ, theo mục 2 |
+| Box chỉ ôm bóng sáng hoặc bao cả quầng sáng/cột | Kiểm lại biên vỏ và dung sai 2 pixel ở ảnh gốc |
+| Đèn mờ hoặc bị che được gán `off` | Chỉ dùng `off` khi nhìn đủ vỏ và xác nhận không bóng nào sáng |
+| Phân vân màu thì chọn đỏ để thận trọng | Chọn `state=unknown`, `needs_review=true`; không tạo nhãn màu thiếu bằng chứng |
+| Dùng `red_yellow` khi chỉ phân vân một bóng là đỏ hay vàng | `red_yellow` chỉ khi thấy rõ hai bóng đỏ và vàng cùng sáng; phân vân thì `unknown` |
+| Bỏ sót dropdown (export còn `__undefined__`), chọn `unknown` mà chưa đọc ảnh, hoặc chọn `unknown` nhưng không bật review | Chọn đủ ba dropdown cho mọi box; còn thiếu bằng chứng sau khi đọc thì chọn `unknown` và bật `needs_review` |
+| Dùng ảnh trước/sau để điền màu hoặc đoán phần vỏ bị che | Mỗi ảnh độc lập; chỉ dùng bằng chứng của ảnh hiện tại |
+| Box cần review nhưng chỉ ghi issue hoặc nhắn miệng | Lưu `needs_review=true` trên box; issue không có box được kiểm tra riêng, không coi là decision ESCALATE trong export |
+| Bỏ đèn đi bộ hoặc gán nó điều khiển ego vì đang sáng xanh/trắng | Vẫn vẽ với `signal_type=pedestrian`, `ego_relevance=not_relevant`; `state` theo ý nghĩa ký hiệu (người đi → `green`, bàn tay → `red`) |
+| Gán mũi tên thẳng là đèn tròn, hoặc đoán hướng mũi tên theo vị trí vỏ | Đọc hình ký hiệu, chọn `straight_arrow/left_arrow/right_arrow`; hình không rõ thì `unknown` |
+>>>>>>> c71c95aa956ae63f6f083a9327ae61fcf949e39a
 
 ### Checklist trước khi Save / export
 
-- [ ] Đã đọc hướng giả định; không tự suy ra ý định thực tế của xe.
+- [ ] Task description có dòng “Hướng di chuyển giả định của ego: đi thẳng”; không tự suy ra ý định thực tế của xe.
 - [ ] Đã quét toàn ảnh; mỗi đầu đèn nhận diện và đặt khung được có đúng một box.
 - [ ] Mỗi box thuộc `traffic_light`, đúng phần vỏ nhìn thấy và dung sai; không vẽ đèn xe/biển báo.
 - [ ] Đã chọn cả ba dropdown của từng box: không box nào còn `__undefined__`, không chọn `unknown` thay cho việc đọc ảnh, không dùng tên/giá trị ngoài mục 4.

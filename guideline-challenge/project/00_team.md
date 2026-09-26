@@ -5,8 +5,9 @@
 - **Team:** Traffic
 - **Nhóm peer test bài của mình:** TODO (cặp A ↔ B; số nhóm lẻ thì ring 3 nhóm A → B → C → A — Lab Coach công bố)
 - **Nhóm mình test bài của:** TODO
-- **Problem family:** TODO (xem README mục "1 · Chọn bài toán")
-- **Nguồn ảnh:** BDD có đèn, và data\lisa
+- **Problem family:** Traffic light (state, relevance, direction)
+- **Nguồn ảnh:** `lisa` (một clip 30 frame, tình huống trọng tâm đèn tròn xanh + mũi tên trái đỏ) và `bdd100k` (ảnh
+  có đèn: ban ngày, ban đêm, mưa, tuyết, chạng vạng; bộ blind chủ yếu lấy từ BDD để là cảnh chưa thấy)
 
 | Thành viên | GitHub | Vai trò chính | File phụ trách |
 |---|---|---|---|
