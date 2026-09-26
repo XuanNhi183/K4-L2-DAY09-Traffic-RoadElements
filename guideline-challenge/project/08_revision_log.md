@@ -7,4 +7,6 @@ calibration report, câu hỏi trong clarification log, feedback của peer).
 Cột Version ghi dạng `v1`, `v2`, `v3` — `make status` tìm dòng bảng có `v2` và dòng có `v3`.
 
 | Version | Đổi gì | Vì sao | Bằng chứng |
-|---|---|---|---|
+| ------- | ------ | ------ | ---------- |
+
+- v2: Thêm các quy tắc edge cases và chuẩn bị tập blind cho đèn giao thông.
